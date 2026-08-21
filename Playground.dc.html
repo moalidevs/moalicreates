@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Moe Ali — Playground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400..700;1,400..700&family=Martian+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+:root { --accent: #7c4dff; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #0d0c10; color: #f2f1f5; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+@font-face { font-family: 'Druk'; src: url('uploads/Druk-Medium-Trial.otf') format('opentype'); font-weight: 500; font-display: swap; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(28px) } to { opacity: 1; transform: translateY(0) } }
+@property --cta-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes cta-spin { to { --cta-angle: 360deg } }
+.shiny-cta {
+  --cta-bg: #f2f1f5;
+  --cta-ring: var(--accent);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--cta-bg), var(--cta-bg)) padding-box,
+    conic-gradient(from var(--cta-angle), transparent 0deg, transparent 200deg, color-mix(in oklab, var(--cta-ring) 45%, white) 280deg, var(--cta-ring) 320deg, color-mix(in oklab, var(--cta-ring) 45%, white) 340deg, transparent 360deg) border-box;
+  animation: cta-spin 4s linear infinite;
+  transition: --cta-bg .35s ease, color .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
+}
+.shiny-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(100deg, transparent 22%, color-mix(in oklab, var(--cta-ring) 38%, white) 50%, transparent 78%);
+  opacity: .85;
+  transform: translateX(-130%);
+  transition: transform .85s cubic-bezier(.22,1,.36,1);
+  pointer-events: none;
+}
+.shiny-cta:is(:hover, :focus-visible)::before { transform: translateX(130%); }
+.shiny-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(120% 100% at 50% 130%, color-mix(in oklab, var(--cta-ring) 55%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity .4s ease;
+  pointer-events: none;
+}
+.shiny-cta:is(:hover, :focus-visible)::after { opacity: 1; }
+.shiny-cta > * { position: relative; z-index: 2; }
+.shiny-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.shiny-cta:active { transform: translateY(1px); }
+@media (prefers-reduced-motion: reduce) {
+  .shiny-cta { animation: none }
+  .shiny-cta::before { transition: none; transform: translateX(-130%) }
+}
+@media (max-width: 860px) {
+  [data-nav-links], [data-nav-secondary] { display: none !important; }
+}
+/* Playground reticle cursor. The ring trails the pointer on a spring while the dot
+   pins to the true position — the gap between them is what reads as depth. Chevrons
+   carry the "pan in any direction" affordance the old text label used to spell out. */
+[data-pg-cursor] .cur-ring {
+  position: absolute; inset: 0; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.30);
+  box-shadow: inset 0 0 0 .5px rgba(255,255,255,.05),
+              0 0 21px -5px color-mix(in oklab, var(--accent) 65%, transparent);
+  transition: transform .55s cubic-bezier(.32,.72,0,1),
+              border-color .55s cubic-bezier(.32,.72,0,1),
+              box-shadow .55s cubic-bezier(.32,.72,0,1);
+}
+[data-pg-cursor] .cur-dot {
+  position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px 0 0 -2px;
+  border-radius: 999px; background: var(--accent);
+  box-shadow: 0 0 10px -1px color-mix(in oklab, var(--accent) 80%, transparent);
+  will-change: transform;
+}
+[data-pg-cursor] .cur-chev {
+  position: absolute; left: 50%; top: 50%; width: 6.5px; height: 4px; margin: -2px 0 0 -3.25px;
+  color: rgba(255,255,255,.52); opacity: .62;
+  transition: transform .55s cubic-bezier(.32,.72,0,1),
+              opacity .4s cubic-bezier(.32,.72,0,1),
+              color .4s cubic-bezier(.32,.72,0,1);
+}
+[data-pg-cursor] .cur-chev svg { display: block; width: 100%; height: 100%; }
+[data-pg-cursor] .cur-n { transform: translateY(-13.6px); }
+[data-pg-cursor] .cur-e { transform: translateX(13.6px) rotate(90deg); }
+[data-pg-cursor] .cur-s { transform: translateY(13.6px) rotate(180deg); }
+[data-pg-cursor] .cur-w { transform: translateX(-13.6px) rotate(270deg); }
+/* Press: ring contracts under the finger, chevrons splay out and ignite. */
+[data-pg-cursor][data-grab="1"] .cur-ring {
+  transform: scale(.72);
+  border-color: color-mix(in oklab, var(--accent) 70%, white);
+  box-shadow: inset 0 0 0 .5px rgba(255,255,255,.10),
+              0 0 27px -3px color-mix(in oklab, var(--accent) 85%, transparent);
+}
+[data-pg-cursor][data-grab="1"] .cur-chev { opacity: 1; color: color-mix(in oklab, var(--accent) 45%, white); }
+[data-pg-cursor][data-grab="1"] .cur-n { transform: translateY(-20px); }
+[data-pg-cursor][data-grab="1"] .cur-e { transform: translateX(20px) rotate(90deg); }
+[data-pg-cursor][data-grab="1"] .cur-s { transform: translateY(20px) rotate(180deg); }
+[data-pg-cursor][data-grab="1"] .cur-w { transform: translateX(-20px) rotate(270deg); }
+@media (prefers-reduced-motion: reduce) {
+  [data-pg-cursor] .cur-ring, [data-pg-cursor] .cur-chev { transition: none !important; }
+}
+@media (hover: none) {
+  [data-pg-cursor] { display: none !important; }
+}
+</style>
+</helmet>
+
+<div data-pgboot="" style="position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;justify-content:flex-end;gap:clamp(18px,2vw,30px);padding:clamp(28px,4vw,64px);background:#0d0c10;transition:transform .72s cubic-bezier(.72,0,.24,1)">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+    <span style="font-family:'Druk','Inter Tight',sans-serif;font-weight:500;font-size:clamp(56px,12vw,200px);line-height:.78;letter-spacing:-.015em;text-transform:uppercase;color:#f2f1f5">Playground</span>
+    <span data-pgboot-count="" style="font-family:'Martian Mono',monospace;font-size:12px;letter-spacing:0.014em;color:rgba(255,255,255,.42);padding-bottom:.6em">000</span>
+  </div>
+  <div style="height:1px;background:rgba(255,255,255,.14)"><div data-pgboot-bar="" style="height:100%;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.23,1,.32,1)"></div></div>
+  <span data-pgboot-label="" style="font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:0.014em;text-transform:uppercase;color:rgba(255,255,255,.42)">Unpacking experiments</span>
+</div>
+<div style="width:100%;height:100vh;overflow:hidden;display:flex;flex-direction:column">
+
+  <x-import component="GradualBlur" from="./GradualBlur.jsx" target="page" position="top" height="7rem" strength="{{ 2.4 }}" div-count="{{ 6 }}" curve="bezier" exponential="{{ true }}" opacity="{{ 1 }}" z-index="{{ -60 }}" hint-size="100%,7rem"></x-import>
+  <nav data-nav="" style="position:relative;z-index:60;flex:0 0 auto;display:flex;justify-content:center;padding:20px 24px;pointer-events:none">
+    <div data-nav-shell="" style="pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:space-between;gap:clamp(10px,1.6vw,28px);width:100%;max-width:1180px;overflow:hidden;padding:9px 9px 9px 10px;border-radius:999px;background:rgba(16,15,20,.62);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 48px rgba(8,7,12,.34);transition:background .4s ease,box-shadow .4s ease,padding .4s cubic-bezier(.22,1,.36,1)">
+      <a href="Moe Ali Portfolio.dc.html#top" aria-label="Back to the portfolio" style="display:flex;align-items:center;gap:11px;flex:0 1 auto;min-width:34px;overflow:hidden;padding:0 6px 0 8px;height:44px;color:#fff">
+        <img src="uploads/MA logo.png" alt="Moe Ali" width="34" height="34" style="display:block;width:34px;height:34px;flex:none;border-radius:999px" />
+        <span style="display:flex;align-items:center;gap:7px;flex:0 1 auto;min-width:0;overflow:hidden;white-space:nowrap;font-family:'Martian Mono',monospace;font-size:10px;letter-spacing:0.054em;text-transform:uppercase;color:rgba(242,241,245,.62)">
+          <span data-nav-dot="" style="width:6px;height:6px;border-radius:999px;background:#59d68a;box-shadow:0 0 0 3px rgba(89,214,138,.18)"></span>Open for work</span>
+      </a>
+
+      <div data-nav-links="" style="position:relative;display:flex;align-items:center;gap:2px;flex:0 0 auto">
+        <span data-nav-ind="" aria-hidden="true" style="position:absolute;left:0;top:0;height:100%;border-radius:999px;background:rgba(255,255,255,.11);opacity:0;transform:translateX(0px);width:0;transition:transform .45s cubic-bezier(.22,1,.36,1),width .45s cubic-bezier(.22,1,.36,1),opacity .3s ease;pointer-events:none"></span>
+        <a href="Moe Ali Portfolio.dc.html#work" data-nav-link="" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;color:rgba(242,241,245,.72);font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">Works</a>
+        <a href="Moe Ali Portfolio.dc.html#services" data-nav-link="" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;color:rgba(242,241,245,.72);font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">Services</a>
+        <a href="Moe Ali Portfolio.dc.html#about" data-nav-link="" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;color:rgba(242,241,245,.72);font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">About Me</a>
+        <a href="Moe Ali Portfolio.dc.html#testimonials" data-nav-link="" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;color:rgba(242,241,245,.72);font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">Testimonials</a>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex:0 0 auto">
+        <a href="Playground.dc.html" aria-current="page" data-nav-secondary="" style="display:flex;align-items:center;height:44px;padding:0 clamp(14px,1.5vw,22px);border-radius:999px;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;font-size:14px;font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:background .3s ease,border-color .3s ease" style-hover="background:rgba(255,255,255,.18)">Playground</a>
+        <a href="https://calendly.com/moalicreates/30min" target="_blank" rel="noopener" class="shiny-cta" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 8px 0 clamp(14px,1.5vw,22px);border-radius:999px;--cta-bg:#f2f1f5;color:#100f14;font-size:14px;font-weight:600;letter-spacing:-.005em;white-space:nowrap;" style-hover="--cta-bg:var(--accent);color:#fff"><span>Let's Talk</span>
+          <span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:rgba(16,15,20,.10)">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M4 2.5h5.5V8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+
+  <div style="position:relative;flex:1;min-height:0;border-bottom:1px solid rgba(255,255,255,.12)">
+    <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+      <canvas data-pg-grid style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+      <div style="position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 46%,rgba(120,124,132,.05) 0%,transparent 70%)"></div>
+    </div>
+    <div data-pg-scroller tabindex="0" role="region" aria-label="Playground field — drag, or use arrow keys to pan" style="position:relative;background:transparent;overflow:auto;height:100%;cursor:none;scrollbar-width:none;-ms-overflow-style:none;outline:none;outline-offset:-3px">
+      <div style="position:relative;width:3600px;height:1360px;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:56px 56px">
+      <div data-pg-tile data-depth="0.9" style="position:absolute;left:60px;top:80px;width:320px;will-change:transform">
+        <div style="position:relative;height:230px;background:#17161c;overflow:hidden"><image-slot id="play-1" shape="rect" placeholder="kinetic type"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2026</span>
+          <span>NAME: KINETIC TYPE<br />TYPE: WEBGL</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.1" style="position:absolute;left:520px;top:320px;width:300px;will-change:transform">
+        <div style="position:relative;height:380px;background:#17161c;overflow:hidden"><image-slot id="play-2" shape="rect" placeholder="cursor physics"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2026</span>
+          <span>NAME: CURSOR PHYSICS<br />TYPE: INTERACTION</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="0.86" style="position:absolute;left:960px;top:60px;width:340px;will-change:transform">
+        <div style="position:relative;height:440px;background:#17161c;overflow:hidden"><image-slot id="play-3" shape="rect" placeholder="shader cards"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2025</span>
+          <span>NAME: SHADER CARDS<br />TYPE: GLSL</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.12" style="position:absolute;left:1440px;top:300px;width:320px;will-change:transform">
+        <div style="position:relative;height:220px;background:#17161c;overflow:hidden"><image-slot id="play-4" shape="rect" placeholder="icon set 01"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2025</span>
+          <span>NAME: ICON SET 01<br />TYPE: ICONOGRAPHY</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="0.94" style="position:absolute;left:1860px;top:90px;width:330px;will-change:transform">
+        <div style="position:relative;height:250px;background:#17161c;overflow:hidden"><image-slot id="play-5" shape="rect" placeholder="sound toggles"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2024</span>
+          <span>NAME: SOUND TOGGLES<br />TYPE: AUDIO UI</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.06" style="position:absolute;left:2300px;top:240px;width:300px;will-change:transform">
+        <div style="position:relative;height:390px;background:#17161c;overflow:hidden"><image-slot id="play-6" shape="rect" placeholder="grid studies"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2024</span>
+          <span>NAME: GRID STUDIES<br />TYPE: LAYOUT</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="0.88" style="position:absolute;left:2760px;top:60px;width:360px;will-change:transform">
+        <div style="position:relative;height:260px;background:#17161c;overflow:hidden"><image-slot id="play-7" shape="rect" placeholder="scroll rigs"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2023</span>
+          <span>NAME: SCROLL RIGS<br />TYPE: MOTION</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.08" style="position:absolute;left:3180px;top:300px;width:300px;will-change:transform">
+        <div style="position:relative;height:380px;background:#17161c;overflow:hidden"><image-slot id="play-8" shape="rect" placeholder="type specimen"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2023</span>
+          <span>NAME: TYPE SPECIMEN<br />TYPE: EDITORIAL</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.04" style="position:absolute;left:140px;top:760px;width:340px;will-change:transform">
+        <div style="position:relative;height:420px;background:#17161c;overflow:hidden"><image-slot id="play-9" shape="rect" placeholder="data sketches"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2026</span>
+          <span>NAME: DATA SKETCHES<br />TYPE: DATAVIZ</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="0.92" style="position:absolute;left:640px;top:900px;width:300px;will-change:transform">
+        <div style="position:relative;height:240px;background:#17161c;overflow:hidden"><image-slot id="play-10" shape="rect" placeholder="button states"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2025</span>
+          <span>NAME: BUTTON STATES<br />TYPE: MICRO-UI</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.1" style="position:absolute;left:1080px;top:720px;width:320px;will-change:transform">
+        <div style="position:relative;height:400px;background:#17161c;overflow:hidden"><image-slot id="play-11" shape="rect" placeholder="paper textures"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2025</span>
+          <span>NAME: PAPER TEXTURES<br />TYPE: MATERIAL</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="0.87" style="position:absolute;left:1560px;top:880px;width:360px;will-change:transform">
+        <div style="position:relative;height:250px;background:#17161c;overflow:hidden"><image-slot id="play-12" shape="rect" placeholder="map tiles"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2024</span>
+          <span>NAME: MAP TILES<br />TYPE: CARTOGRAPHY</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.05" style="position:absolute;left:2020px;top:700px;width:300px;will-change:transform">
+        <div style="position:relative;height:390px;background:#17161c;overflow:hidden"><image-slot id="play-13" shape="rect" placeholder="loader loops"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2024</span>
+          <span>NAME: LOADER LOOPS<br />TYPE: MOTION</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="0.93" style="position:absolute;left:2480px;top:900px;width:340px;will-change:transform">
+        <div style="position:relative;height:240px;background:#17161c;overflow:hidden"><image-slot id="play-14" shape="rect" placeholder="color ramps"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2023</span>
+          <span>NAME: COLOR RAMPS<br />TYPE: SYSTEMS</span>
+        </div>
+      </div>
+      <div data-pg-tile data-depth="1.09" style="position:absolute;left:2960px;top:740px;width:320px;will-change:transform">
+        <div style="position:relative;height:410px;background:#17161c;overflow:hidden"><image-slot id="play-15" shape="rect" placeholder="form fields"></image-slot></div>
+        <div style="display:grid;grid-template-columns:56px 1fr;gap:12px;margin-top:10px;font-family:'Martian Mono',monospace;font-size:11px;line-height:1.5;letter-spacing:0.014em;color:rgba(255,255,255,.62)">
+          <span>2023</span>
+          <span>NAME: FORM FIELDS<br />TYPE: MICRO-UI</span>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div data-pg-hruler style="position:absolute;left:0;right:0;bottom:0;z-index:5;height:64px;pointer-events:none;overflow:hidden;background:linear-gradient(0deg,rgba(13,12,16,.92),rgba(13,12,16,0))">
+      <div data-pg-hticks style="position:absolute;left:0;top:0;width:4100px;height:100%;will-change:transform">
+        <span style="position:absolute;left:0px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">-15</span><span style="position:absolute;left:250px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">-10</span><span style="position:absolute;left:500px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">-5</span><span style="position:absolute;left:750px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">0</span><span style="position:absolute;left:1000px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">5</span><span style="position:absolute;left:1250px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">10</span><span style="position:absolute;left:1500px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">15</span><span style="position:absolute;left:1750px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">20</span><span style="position:absolute;left:2000px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">25</span><span style="position:absolute;left:2250px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">30</span><span style="position:absolute;left:2500px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">35</span><span style="position:absolute;left:2750px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">40</span><span style="position:absolute;left:3000px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">45</span><span style="position:absolute;left:3250px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">50</span><span style="position:absolute;left:3500px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">55</span><span style="position:absolute;left:3750px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">60</span><span style="position:absolute;left:4000px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">65</span><span style="position:absolute;left:4250px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">70</span><span style="position:absolute;left:4500px;bottom:24px;transform:translateX(-50%);font-family:'Martian Mono',monospace;font-size:13px;color:rgba(255,255,255,.7)">75</span>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:14px;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0 1px,transparent 1px 25px)"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:22px;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.75) 0 1px,transparent 1px 125px)"></div>
+      </div>
+    </div>
+
+
+    <div style="position:absolute;left:50%;bottom:0;width:3px;height:30px;background:var(--accent);pointer-events:none"></div>
+    <div data-pg-cursor aria-hidden="true" style="position:fixed;left:0;top:0;z-index:80;width:37px;height:37px;opacity:0;transform:translate3d(-9999px,-9999px,0);transition:opacity .32s cubic-bezier(.32,.72,0,1);pointer-events:none;will-change:transform">
+      <span class="cur-ring"></span>
+      <span class="cur-chev cur-n"><svg viewBox="0 0 8 5" fill="none" aria-hidden="true"><path d="M1 4 4 1l3 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="cur-chev cur-e"><svg viewBox="0 0 8 5" fill="none" aria-hidden="true"><path d="M1 4 4 1l3 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="cur-chev cur-s"><svg viewBox="0 0 8 5" fill="none" aria-hidden="true"><path d="M1 4 4 1l3 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="cur-chev cur-w"><svg viewBox="0 0 8 5" fill="none" aria-hidden="true"><path d="M1 4 4 1l3 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="cur-dot"></span>
+    </div>
+    <div data-pg-coords style="position:absolute;left:24px;top:20px;padding:6px 10px;border:1px solid rgba(255,255,255,.16);background:rgba(13,12,16,.72);font-family:'Martian Mono',monospace;font-size:12px;letter-spacing:0.02em;white-space:nowrap;color:rgba(255,255,255,.7);pointer-events:none">X 000 · Y 000</div>
+  </div>
+
+  <footer style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:16px 24px;max-width:1600px;margin:0 auto;width:100%;font-family:'Martian Mono',monospace;font-size:12px;letter-spacing:0.014em;color:rgba(255,255,255,.55)">
+    <a href="Moe Ali Portfolio.dc.html" style="display:inline-flex;align-items:center;gap:10px">&#8592; Back to portfolio</a>
+    <div style="display:flex;gap:28px">
+      <a href="https://www.linkedin.com/in/moe-uix/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:moalicreates@gmail.com">Email</a>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#7c4dff&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#7c4dff&quot;,&quot;#b8452f&quot;,&quot;#2f6f5e&quot;,&quot;#c2a04a&quot;],&quot;section&quot;:&quot;Theme&quot;},&quot;tiltAmplitude&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:11,&quot;min&quot;:0,&quot;max&quot;:20,&quot;step&quot;:1,&quot;unit&quot;:&quot;deg&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;tiltScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1.05,&quot;min&quot;:1,&quot;max&quot;:1.15,&quot;step&quot;:0.01,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+class Component extends DCLogic {
+  // Arrival frame: holds the field behind a panel while the tile images decode, then
+  // lifts away. Progress tracks real image readiness, with a floor and a hard ceiling.
+  setupBoot() {
+    const panel = document.querySelector('[data-pgboot]');
+    if (!panel) return;
+    const bar = panel.querySelector('[data-pgboot-bar]');
+    const count = panel.querySelector('[data-pgboot-count]');
+    const label = panel.querySelector('[data-pgboot-label]');
+    const words = ['Unpacking experiments', 'Wiring the field', 'Almost open'];
+    // The tile photos live inside each <image-slot>'s shadow root, so reach through it.
+    const imgs = () => Array.from(document.querySelectorAll('[data-pg-tile] image-slot'))
+      .flatMap(s => Array.from(((s.shadowRoot || s).querySelectorAll('img')) || []))
+      .filter(im => im.currentSrc || im.src);
+    const t0 = performance.now();
+    const MIN = 1100, MAX = 4200;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      if (bar) bar.style.transform = 'scaleX(1)';
+      if (count) count.textContent = '100';
+      panel.style.transform = 'translateY(-101%)';
+      setTimeout(() => { panel.style.display = 'none'; }, 900);
+    };
+    const tick = () => {
+      if (done) return;
+      const all = imgs();
+      const ready = all.filter(im => im.complete && im.naturalWidth).length;
+      const byImg = all.length ? ready / all.length : 1;
+      const byTime = Math.min(1, (performance.now() - t0) / MIN);
+      const p = Math.min(byImg, byTime);
+      if (bar) bar.style.transform = 'scaleX(' + p.toFixed(3) + ')';
+      if (count) count.textContent = String(Math.round(p * 100)).padStart(3, '0');
+      if (label) label.textContent = words[Math.min(words.length - 1, Math.floor(p * words.length))];
+      if (p >= 1 || performance.now() - t0 > MAX) { finish(); return; }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    setTimeout(finish, MAX + 200);
+  }
+  // Same sliding pill as the portfolio nav; here it rests on the current page.
+  setupNav() {
+    const group = document.querySelector('[data-nav-links]');
+    const ind = group && group.querySelector('[data-nav-ind]');
+    if (!group || !ind) return;
+    const links = Array.from(group.querySelectorAll('[data-nav-link]'));
+    // The active link keeps its authored pill, so the current page is marked without
+    // depending on the indicator's initial placement surviving mount.
+    const home = null;
+    const move = (el) => {
+      if (!el) { ind.style.opacity = '0'; return; }
+      ind.style.opacity = '1';
+      ind.style.width = el.offsetWidth + 'px';
+      ind.style.transform = 'translateX(' + el.offsetLeft + 'px)';
+    };
+    links.forEach(a => {
+      a.addEventListener('pointerenter', () => move(a));
+      a.addEventListener('focus', () => move(a));
+    });
+    group.addEventListener('pointerleave', () => move(home));
+    this._navRest = () => move(home);
+    window.addEventListener('resize', this._navRest, { passive: true });
+    requestAnimationFrame(this._navRest);
+  }
+  componentDidMount() {
+    document.documentElement.style.setProperty('--accent', this.props.accentColor || '#7c4dff');
+    this.setupPlayground();
+    this.setupNav();
+    this.setupBoot();
+    this.setupTilt();
+  }
+  // Drag-driven 3D tilt: every photo banks in the direction the camera travels,
+  // spring-damped so it overshoots slightly and settles after release. No hover state.
+  setupTilt() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const scroller = document.querySelector('[data-pg-scroller]');
+    if (!scroller) return;
+    const amp = Number(this.props.tiltAmplitude ?? 11);
+    const lift = Number(this.props.tiltScale ?? 1.05);
+    const REF = 34;                       // camera speed (px/frame) that maps to full tilt
+    const K = 0.13, D = 0.78;             // spring stiffness / damping — slight overshoot
+    const clamp1 = (n) => Math.max(-1, Math.min(1, n));
+
+    const planes = Array.from(document.querySelectorAll('[data-pg-tile]')).map((tile) => {
+      const slot = tile.querySelector('image-slot');
+      const frame = slot && slot.parentElement;
+      if (!frame) return null;
+      const d = parseFloat(tile.getAttribute('data-depth')) || 1;
+      frame.style.perspective = '900px';
+      slot.style.display = 'block';
+      slot.style.width = '100%';
+      slot.style.height = '100%';
+      slot.style.willChange = 'transform';
+      slot.style.transformStyle = 'preserve-3d';
+      // nearer planes (higher depth factor) bank harder — same law the deform uses
+      return { slot, w: 0.6 + (d - 0.86) / 0.26 * 0.85, s: { x: 0, y: 0 }, v: { x: 0, y: 0 } };
+    }).filter(Boolean);
+    if (!planes.length) return;
+
+    let px = scroller.scrollLeft, py = scroller.scrollTop;
+    let vx = 0, vy = 0, raf = 0;
+
+    const tick = () => {
+      const x = scroller.scrollLeft, y = scroller.scrollTop;
+      // low-passed camera velocity — carries through inertia, decays to zero on settle
+      vx += ((x - px) - vx) * 0.35;
+      vy += ((y - py) - vy) * 0.35;
+      px = x; py = y;
+      if (Math.abs(vx) < 0.02) vx = 0;
+      if (Math.abs(vy) < 0.02) vy = 0;
+      const nx = clamp1(vx / REF), ny = clamp1(vy / REF);
+      let moving = vx !== 0 || vy !== 0;
+
+      planes.forEach((p) => {
+        const tx = ny * amp * p.w;        // drag up → tops of the planes pitch away
+        const ty = nx * amp * p.w;        // drag left → planes yaw with the travel
+        p.v.x = (p.v.x + (tx - p.s.x) * K) * D;
+        p.v.y = (p.v.y + (ty - p.s.y) * K) * D;
+        p.s.x += p.v.x; p.s.y += p.v.y;
+        if (Math.abs(p.v.x) > 0.002 || Math.abs(p.v.y) > 0.002 || Math.abs(tx - p.s.x) > 0.002 || Math.abs(ty - p.s.y) > 0.002) moving = true;
+        const mag = Math.min(1, (Math.abs(p.s.x) + Math.abs(p.s.y)) / (amp * 1.6));
+        const sc = 1 + (lift - 1) * mag;
+        if (Math.abs(p.s.x) < 0.01 && Math.abs(p.s.y) < 0.01) { p.slot.style.transform = ''; return; }
+        p.slot.style.transform = 'rotateX(' + p.s.x.toFixed(3) + 'deg) rotateY(' + p.s.y.toFixed(3) + 'deg) scale(' + sc.toFixed(4) + ')';
+      });
+      raf = moving ? requestAnimationFrame(tick) : 0;
+    };
+    const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    scroller.addEventListener('scroll', kick, { passive: true });
+    scroller.addEventListener('pointerdown', kick);
+  }
+  componentDidUpdate() {
+    document.documentElement.style.setProperty('--accent', this.props.accentColor || '#7c4dff');
+  }
+  setupPlayground() {
+    const scroller = document.querySelector('[data-pg-scroller]');
+    if (!scroller) return;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tiles = Array.from(scroller.querySelectorAll('[data-pg-tile]')).map(el => {
+      const d = parseFloat(el.getAttribute('data-depth')) || 1;
+      const media = el.firstElementChild;
+      if (media) {
+        media.style.willChange = 'transform';
+        media.style.transformOrigin = '50% 50%';
+        media.style.backfaceVisibility = 'hidden';
+      }
+      // foreground planes (higher depth factor) deform more than distant ones
+      return { el, d, media, s: 0.55 + (d - 0.86) / 0.26 * 0.9 };
+    });
+    const grid = this.setupGrid();
+    const hticks = document.querySelector('[data-pg-hticks]');
+    const coords = document.querySelector('[data-pg-coords]');
+    const maxX = () => scroller.scrollWidth - scroller.clientWidth;
+    const maxY = () => scroller.scrollHeight - scroller.clientHeight;
+    let down = false, sx = 0, sy = 0, sl = 0, st = 0, moved = false;
+    let vx = 0, vy = 0, lx = 0, ly = 0, lt = 0, raf = 0, smooth = 0;
+    const friction = 0.93, maxV = 70;
+    const pad = (n) => (n < 0 ? '-' : '') + String(Math.abs(Math.round(n))).padStart(3, '0');
+
+    // ---- velocity-driven elastic deformation -------------------------------
+    // Driven by camera velocity (vx/vy), so it keeps going through inertia and
+    // damps back to a clean rectangle once the camera settles.
+    let ex = 0, ey = 0, eraf = 0;
+    const REF = 34;            // velocity that maps to full deformation
+    const clamp1 = (n) => Math.max(-1, Math.min(1, n));
+    const applyDeform = () => {
+      const nx = clamp1(ex / REF), ny = clamp1(ey / REF);
+      const ax = Math.abs(nx), ay = Math.abs(ny);
+      tiles.forEach((t) => {
+        if (!t.media) return;
+        if (ax < 0.004 && ay < 0.004) { t.media.style.transform = ''; return; }
+        const s = t.s;
+        // stretch along travel, compress across it — volume-preserving feel
+        const sx = 1 + (0.062 * ax - 0.034 * ay) * s;
+        const sy = 1 + (0.062 * ay - 0.034 * ax) * s;
+        const kx = -nx * 1.9 * s;
+        const ky = -ny * 1.0 * s;
+        t.media.style.transform =
+          'scale(' + sx.toFixed(4) + ',' + sy.toFixed(4) + ') skew(' + kx.toFixed(2) + 'deg,' + ky.toFixed(2) + 'deg)';
+      });
+    };
+    const elasticTick = () => {
+      eraf = 0;
+      const live = down || Math.abs(vx) > 0.3 || Math.abs(vy) > 0.3;
+      const tx = live ? vx : 0, ty = live ? vy : 0;
+      // asymmetric damping: quick to build, softer to release (spring-like return)
+      const kIn = 0.22, kOut = 0.085;
+      ex += (tx - ex) * (Math.abs(tx) > Math.abs(ex) ? kIn : kOut);
+      ey += (ty - ey) * (Math.abs(ty) > Math.abs(ey) ? kIn : kOut);
+      if (Math.abs(ex) < 0.08) ex = 0;
+      if (Math.abs(ey) < 0.08) ey = 0;
+      applyDeform();
+      if (ex !== 0 || ey !== 0 || live) eraf = requestAnimationFrame(elasticTick);
+    };
+    // run one damping step immediately (no input lag), then let rAF carry it
+    const elastic = () => { if (!eraf && !reduced) elasticTick(); };
+    const render = () => {
+      const x = scroller.scrollLeft, y = scroller.scrollTop;
+      smooth += (vx - smooth) * 0.15;
+      const skew = reduced ? 0 : Math.max(-4, Math.min(4, smooth * 0.06));
+      const cw = scroller.clientWidth, ch = scroller.clientHeight;
+      tiles.forEach((t) => {
+        if (t.cx === undefined) { t.cx = t.el.offsetLeft + t.el.offsetWidth / 2; t.cy = t.el.offsetTop + t.el.offsetHeight / 2; }
+        const px = Math.max(-56, Math.min(56, (t.cx - x - cw / 2) * (1 - t.d) * 0.5));
+        const py = Math.max(-36, Math.min(36, (t.cy - y - ch / 2) * (1 - t.d) * 0.35));
+        t.el.style.transform = 'translate3d(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px,0) skewX(' + (skew * (t.d - 1) * 2).toFixed(2) + 'deg)';
+      });
+      if (grid) grid(x, y);
+      if (hticks) hticks.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
+      if (coords) coords.textContent = 'X ' + pad((x + cw / 2) / 50 - 15) + ' · Y ' + pad((y + ch / 2) / 50 - 10);
+    };
+    const momentum = () => {
+      raf = 0;
+      if (down) return;
+      scroller.scrollLeft += vx;
+      scroller.scrollTop += vy;
+      vx *= friction; vy *= friction;
+      render();
+      if ((vx < 0 && scroller.scrollLeft <= 0) || (vx > 0 && scroller.scrollLeft >= maxX())) vx = 0;
+      if ((vy < 0 && scroller.scrollTop <= 0) || (vy > 0 && scroller.scrollTop >= maxY())) vy = 0;
+      if (Math.abs(vx) > 0.3 || Math.abs(vy) > 0.3) raf = requestAnimationFrame(momentum);
+      else { vx = vy = 0; render(); }
+    };
+    scroller.addEventListener('pointerdown', (e) => {
+      down = true; moved = false; vx = vy = 0;
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      sx = lx = e.clientX; sy = ly = e.clientY;
+      sl = scroller.scrollLeft; st = scroller.scrollTop;
+      lt = performance.now();
+      scroller.style.cursor = 'none';
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+      scroller.scrollLeft = sl - dx;
+      scroller.scrollTop = st - dy;
+      const now = performance.now(), dt = Math.max(1, now - lt);
+      vx = Math.max(-maxV, Math.min(maxV, (lx - e.clientX) / dt * 16));
+      vy = Math.max(-maxV, Math.min(maxV, (ly - e.clientY) / dt * 16));
+      lx = e.clientX; ly = e.clientY; lt = now;
+      render();
+      elastic();
+    }, { passive: true });
+    window.addEventListener('pointerup', () => {
+      if (!down) return;
+      down = false;
+      scroller.style.cursor = 'none';
+      if (!reduced && (Math.abs(vx) > 1 || Math.abs(vy) > 1) && !raf) raf = requestAnimationFrame(momentum);
+      elastic();
+    });
+    scroller.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+    scroller.addEventListener('wheel', (e) => {
+      if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      const canY = e.deltaY > 0 ? scroller.scrollTop < maxY() - 1 : scroller.scrollTop > 0;
+      if (canY) { scroller.scrollTop += e.deltaY; render(); e.preventDefault(); }
+    }, { passive: false });
+    scroller.addEventListener('scroll', render, { passive: true });
+    scroller.addEventListener('keydown', (e) => {
+      const step = e.shiftKey ? 240 : 80;
+      const map = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+      const d = map[e.key];
+      if (!d) return;
+      scroller.scrollLeft += d[0];
+      scroller.scrollTop += d[1];
+      render();
+      e.preventDefault();
+    });
+    scroller.addEventListener('focus', () => {
+      if (scroller.matches(':focus-visible')) scroller.style.outline = '2px solid var(--accent)';
+    });
+    scroller.addEventListener('blur', () => { scroller.style.outline = 'none'; });
+    window.addEventListener('resize', render, { passive: true });
+    this.setupCursor(scroller);
+    scroller.scrollLeft = 140;
+    scroller.scrollTop = 60;
+    render();
+    if (!reduced) this.nudge(scroller, render);
+  }
+  // GlitterWrap starfield warp tunnel — exact panel values:
+  // colors all #FFFFFF, speed 1, density 100, star size 12, focal depth 8,
+  // turbulence 0, brightness 100, glitter 3, trails 0, direction outward.
+  setupGrid() {
+    const cv = document.querySelector('[data-pg-grid]');
+    if (!cv) return null;
+    const ctx = cv.getContext('2d');
+    if (!ctx) return null;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const PARTICLE_COUNT = 312;
+    const STEP_Z = 0.75 * 0.0008;     // speed 0.75
+    const FOCAL = 8 / 100;            // focal depth 8
+    const STAR_SCALE = 12 * 0.15;     // starSize 12
+    const DENSITY = 100;
+    const TURBULENCE = 0;             // turbulence 0
+    const GLITTER = 3 * 0.1;          // glitterIntensity 3
+    const BRIGHTNESS = 1;             // brightness 100
+    const TRAIL = 0;                  // trails 0 — full clear each frame
+    const rgbStrs = ['rgb(255, 255, 255)', 'rgb(255, 255, 255)', 'rgb(255, 255, 255)'];
+
+    let w = 0, h = 0, dpr = 1;
+    const size = () => {
+      const ndpr = Math.min(window.devicePixelRatio || 1, 2);
+      const nw = Math.max(1, Math.floor(cv.clientWidth) || 600);
+      const nh = Math.max(1, Math.floor(cv.clientHeight) || 400);
+      if (nw === w && nh === h && ndpr === dpr) return; // resizing wipes the trail buffer
+      w = nw; h = nh; dpr = ndpr;
+      cv.width = Math.floor(w * dpr); cv.height = Math.floor(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+    };
+    size();
+
+    let elapsed = 0, lastT = performance.now();
+    const stars = [];
+    const resetStar = (s, initial) => {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = (0.2 + Math.random() * 0.8) * (DENSITY / 15);
+      s.x = Math.cos(angle) * radius;
+      s.y = Math.sin(angle) * radius;
+      s.z = initial ? Math.random() : 1.0;
+      s.px = NaN; s.py = NaN;
+      s.seed = Math.random() * 1000;
+      s.vmul = 0.6 + Math.random() * 0.8;
+      s.colorIdx = Math.floor(Math.random() * 3);
+      s.flashUntil = 0;
+      s.nextFlash = elapsed + 1 + Math.random() * 4 * (1 / Math.max(0.0001, GLITTER));
+    };
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const s = { x: 0, y: 0, z: 0, px: NaN, py: NaN, seed: 0, vmul: 1, colorIdx: 0, flashUntil: 0, nextFlash: 0 };
+      resetStar(s, true);
+      stars.push(s);
+    }
+
+    let camX = 0, camY = 0;
+    const drawFrame = (deltaSec) => {
+      const cx = w / 2 - camX * 0.02;   // gentle parallax bias from the camera
+      const cy = h / 2 + camY * 0.015;
+      const projScale = Math.min(w, h) * 0.9;
+      const dt = Math.max(0.001, Math.min(0.1, deltaSec)) * 60;
+
+      const keep = Math.pow(Math.min(0.98, Math.max(0, TRAIL)), dt);
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, ' + Math.max(0.02, 1 - keep) + ')';
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+
+      for (let i = 0; i < stars.length; i++) {
+        const s = stars[i];
+        s.z -= STEP_Z * s.vmul * dt;
+        if (s.z <= FOCAL) { resetStar(s); continue; }
+
+        let tx = s.x, ty = s.y;
+        if (TURBULENCE > 0) {
+          const t = elapsed * 1.2 + s.seed;
+          const amp = TURBULENCE * (1 - s.z) * 0.25;
+          tx += Math.sin(t + s.seed) * amp;
+          ty += Math.cos(t * 1.13 + s.seed * 0.7) * amp;
+        }
+
+        const persp = FOCAL / Math.max(s.z, 0.0001);
+        const sx = cx + tx * persp * projScale;
+        const sy = cy + ty * persp * projScale;
+        if (sx < -20 || sx > w + 20 || sy < -20 || sy > h + 20) { resetStar(s); continue; }
+
+        let flashMult = 1;
+        if (GLITTER > 0) {
+          if (elapsed >= s.nextFlash && s.flashUntil < elapsed) {
+            s.flashUntil = elapsed + 0.04 + Math.random() * 0.07;
+            s.nextFlash = elapsed + 1 + Math.random() * 4 * (1 / Math.max(0.0001, GLITTER));
+          }
+          if (elapsed <= s.flashUntil) flashMult = 1 + 2.5 * GLITTER;
+        }
+
+        const sizePersp = Math.min(2.5, (FOCAL / Math.max(s.z, 0.0001)) * 0.6);
+        const baseR = Math.max(0.25, STAR_SCALE * (0.4 + sizePersp));
+        const maxR = 1 + STAR_SCALE * 2.5;
+        const r = Math.min(baseR * flashMult, maxR);
+
+        const lifeT = 1 - s.z;
+        const a = Math.min(1, lifeT * 0.9 + 0.05) * BRIGHTNESS * (flashMult > 1 ? 1 : 0.85);
+        const colStr = rgbStrs[s.colorIdx];
+
+        if (!Number.isNaN(s.px) && !Number.isNaN(s.py)) {
+          ctx.globalAlpha = a * 0.5;
+          ctx.strokeStyle = colStr;
+          ctx.lineWidth = Math.max(0.4, r * 0.4);
+          ctx.beginPath();
+          ctx.moveTo(s.px, s.py);
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+        }
+
+        ctx.globalAlpha = a;
+        ctx.fillStyle = colStr;
+        ctx.fillRect(sx - r, sy - r, r * 2, r * 2);
+
+        if (flashMult > 1) {
+          const rf = Math.min(r * 1.4, maxR * 1.4);
+          ctx.globalAlpha = a * 0.5;
+          ctx.fillRect(sx - rf, sy - rf, rf * 2, rf * 2);
+        }
+
+        s.px = sx; s.py = sy;
+      }
+
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+      elapsed += Math.min(0.1, Math.max(0, deltaSec));
+    };
+
+    if (reduced) {
+      for (let i = 0; i < 80; i++) drawFrame(1 / 60);
+    } else {
+      const loop = (t) => {
+        const deltaSec = (t - lastT) / 1000;
+        lastT = t;
+        drawFrame(deltaSec);
+        requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    }
+    if ('ResizeObserver' in window) new ResizeObserver(() => size()).observe(cv);
+    else window.addEventListener('resize', size, { passive: true });
+    return (x, y) => { camX = x; camY = y; };
+  }
+  setupCursor(scroller) {
+    const cur = document.querySelector('[data-pg-cursor]');
+    if (!cur) return;
+    if (window.matchMedia && !window.matchMedia('(hover: hover)').matches) { cur.remove(); return; }
+    const dot = cur.querySelector('.cur-dot');
+    const soft = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // tx/ty is the true pointer, cx/cy the ring easing toward it. That gap is the whole
+    // effect: the dot stays pinned to the cursor while the ring trails and settles.
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, live = false, half = 18.5;
+    const frame = () => {
+      raf = 0;
+      const k = soft ? 1 : 0.19;
+      cx += (tx - cx) * k;
+      cy += (ty - cy) * k;
+      cur.style.transform = 'translate3d(' + (cx - half) + 'px,' + (cy - half) + 'px,0)';
+      if (dot) dot.style.transform = 'translate3d(' + (tx - cx) + 'px,' + (ty - cy) + 'px,0)';
+      // Keep stepping while the ring is still catching up, or it freezes mid-trail
+      // when the pointer stops and no further pointermove arrives.
+      if (live && (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1)) queue();
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(frame); };
+    scroller.addEventListener('pointermove', (e) => { tx = e.clientX; ty = e.clientY; queue(); });
+    scroller.addEventListener('pointerenter', (e) => {
+      half = cur.offsetWidth / 2 || 18.5;
+      tx = cx = e.clientX; ty = cy = e.clientY;
+      live = true;
+      frame();
+      cur.style.opacity = '1';
+    });
+    scroller.addEventListener('pointerleave', () => { live = false; cur.style.opacity = '0'; });
+    scroller.addEventListener('pointerdown', () => { cur.setAttribute('data-grab', '1'); });
+    window.addEventListener('pointerup', () => { cur.removeAttribute('data-grab'); });
+  }
+  nudge(scroller, render) {
+    // one-time "there is more over here" hint: drifts right/down, back left/up, settles
+    const x0 = scroller.scrollLeft, y0 = scroller.scrollTop;
+    const legs = [
+      [110, 34, 900],
+      [-150, -46, 1100],
+      [40, 12, 800]
+    ];
+    const ease = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    let leg = 0, fromX = x0, fromY = y0, t0 = 0;
+    let cancelled = false;
+    const stop = () => {
+      if (cancelled) return;
+      cancelled = true;
+      ['pointerdown', 'wheel', 'keydown'].forEach(t => scroller.removeEventListener(t, stop));
+    };
+    ['pointerdown', 'wheel', 'keydown'].forEach(t => scroller.addEventListener(t, stop, { passive: true }));
+    const step = (now) => {
+      if (cancelled) return;
+      if (!t0) t0 = now;
+      const [dx, dy, dur] = legs[leg];
+      const p = Math.min(1, (now - t0) / dur);
+      const e = ease(p);
+      scroller.scrollLeft = fromX + dx * e;
+      scroller.scrollTop = fromY + dy * e;
+      render();
+      if (p < 1) return requestAnimationFrame(step);
+      fromX += dx; fromY += dy; t0 = 0; leg++;
+      if (leg < legs.length) requestAnimationFrame(step);
+      else stop();
+    };
+    setTimeout(() => { if (!cancelled) requestAnimationFrame(step); }, 650);
+  }
+}
+</script>
+</body>
+</html>

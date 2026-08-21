@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case study — Moe Ali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400..700;1,400..700&amp;family=Martian+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+:root { --accent: #7c4dff; --ink: #100f14; --paper: #e9e8ec; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #0d0c10; color: #f2f1f5; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--accent); }
+button { font-family: inherit; }
+@font-face { font-family: 'Druk'; src: url('uploads/Druk-Medium-Trial.otf') format('opentype'); font-weight: 500; font-display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes fadeOpacity { from { opacity: 0 } to { opacity: 1 } }
+@property --cta-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes cta-spin { to { --cta-angle: 360deg } }
+.shiny-cta {
+  --cta-bg: #f2f1f5;
+  --cta-ring: var(--accent);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--cta-bg), var(--cta-bg)) padding-box,
+    conic-gradient(from var(--cta-angle), transparent 0deg, transparent 200deg, color-mix(in oklab, var(--cta-ring) 45%, white) 280deg, var(--cta-ring) 320deg, color-mix(in oklab, var(--cta-ring) 45%, white) 340deg, transparent 360deg) border-box;
+  animation: cta-spin 4s linear infinite;
+  transition: --cta-bg .35s ease, color .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
+}
+.shiny-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(100deg, transparent 22%, color-mix(in oklab, var(--cta-ring) 38%, white) 50%, transparent 78%);
+  opacity: .85;
+  transform: translateX(-130%);
+  transition: transform .85s cubic-bezier(.22,1,.36,1);
+  pointer-events: none;
+}
+.shiny-cta:is(:hover, :focus-visible)::before { transform: translateX(130%); }
+.shiny-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(120% 100% at 50% 130%, color-mix(in oklab, var(--cta-ring) 55%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity .4s ease;
+  pointer-events: none;
+}
+.shiny-cta:is(:hover, :focus-visible)::after { opacity: 1; }
+.shiny-cta > * { position: relative; z-index: 2; }
+.shiny-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.shiny-cta:active { transform: translateY(1px); }
+@media (prefers-reduced-motion: reduce) {
+  .shiny-cta { animation: none }
+  .shiny-cta::before { transition: none; transform: translateX(-130%) }
+}
+[data-fab-wrap] { display: none; }
+[data-fab-menu] { scrollbar-width: none; }
+[data-fab-menu]::-webkit-scrollbar { display: none; }
+@media (hover: none) {
+  [data-fab-link]:hover { background: transparent !important; }
+}
+@media (max-width: 860px) {
+  [data-nav-links], [data-nav-secondary] { display: none !important; }
+  [data-fab-wrap] { display: flex !important; }
+  [data-footer-cols] { grid-template-columns: 1fr 1fr !important; gap: 30px !important; }
+}
+@media (max-width: 560px) {
+  [data-footer-cols] { grid-template-columns: 1fr !important; }
+}
+</style>
+</helmet>
+
+  <x-import component="GradualBlur" from="./GradualBlur.jsx" target="page" position="top" height="7rem" strength="{{ 2.4 }}" div-count="{{ 6 }}" curve="bezier" exponential="{{ true }}" opacity="{{ 1 }}" z-index="{{ -60 }}" hint-size="100%,7rem"></x-import>
+  <nav data-nav="" style="position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:center;padding:20px 24px;pointer-events:none">
+    <div data-nav-shell="" style="pointer-events:auto;position:relative;display:flex;align-items:center;justify-content:space-between;gap:clamp(10px,1.6vw,28px);width:100%;max-width:1180px;overflow:hidden;padding:9px 9px 9px 10px;border-radius:999px;background:rgba(16,15,20,.62);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 48px rgba(8,7,12,.34);transition:background .4s ease,box-shadow .4s ease,padding .4s cubic-bezier(.22,1,.36,1)">
+      <a href="Moe Ali Portfolio.dc.html#top" aria-label="Back to home" style="display:flex;align-items:center;gap:11px;flex:0 1 auto;min-width:34px;overflow:hidden;padding:0 6px 0 8px;height:44px;color:#fff">
+        <img src="uploads/MA logo.png" alt="Moe Ali" width="34" height="34" style="display:block;width:34px;height:34px;flex:none;border-radius:999px" />
+        <span style="display:flex;align-items:center;gap:7px;flex:0 1 auto;min-width:0;overflow:hidden;white-space:nowrap;font-family:'Martian Mono',monospace;font-size:10px;letter-spacing:0.054em;text-transform:uppercase;color:rgba(242,241,245,.62)">
+          <span data-nav-dot="" style="width:6px;height:6px;border-radius:999px;background:#59d68a;box-shadow:0 0 0 3px rgba(89,214,138,.18)"></span>Open for work</span>
+      </a>
+
+      <div data-nav-links="" style="position:relative;display:flex;align-items:center;gap:2px;flex:0 0 auto">
+        <a href="Moe Ali Portfolio.dc.html#work" data-nav-link="" aria-current="page" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;background:rgba(255,255,255,.11);color:#fff;font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">Works</a>
+        <a href="Moe Ali Portfolio.dc.html#services" data-nav-link="" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;color:rgba(242,241,245,.72);font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">Services</a>
+        <a href="Moe Ali Portfolio.dc.html#about" data-nav-link="" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;color:rgba(242,241,245,.72);font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">About Me</a>
+        <a href="Moe Ali Portfolio.dc.html#testimonials" data-nav-link="" style="position:relative;display:flex;align-items:center;height:44px;padding:0 clamp(11px,1.35vw,20px);border-radius:999px;color:rgba(242,241,245,.72);font-size:clamp(13px,1.05vw,14px);font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:color .3s ease" style-hover="color:#fff">Testimonials</a>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex:0 0 auto">
+        <a href="Playground.dc.html" data-nav-secondary="" style="display:flex;align-items:center;height:44px;padding:0 clamp(14px,1.5vw,22px);border-radius:999px;border:1px solid rgba(255,255,255,.26);color:#fff;font-size:14px;font-weight:500;letter-spacing:-.005em;white-space:nowrap;transition:background .3s ease,border-color .3s ease" style-hover="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.6)">Playground</a>
+        <a href="https://calendly.com/moalicreates/30min" target="_blank" rel="noopener" class="shiny-cta" style="display:flex;align-items:center;gap:10px;height:44px;padding:0 8px 0 clamp(14px,1.5vw,22px);border-radius:999px;--cta-bg:#f2f1f5;color:#100f14;font-size:14px;font-weight:600;letter-spacing:-.005em;white-space:nowrap;" style-hover="--cta-bg:var(--accent);color:#fff"><span>Let's Talk</span>
+          <span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:rgba(16,15,20,.10)">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M4 2.5h5.5V8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div data-fab-wrap="" style="display:none;position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:250;flex-direction:column;align-items:center;gap:14px;padding-bottom:max(22px, env(safe-area-inset-bottom));pointer-events:none">
+    <div data-fab-menu="" style="pointer-events:none;transform-origin:bottom center;transform:scale(.985) translateY(6px);opacity:0;clip-path:inset(calc(100% - 56px) calc(50% - 28px) 0px calc(50% - 28px) round 28px);display:flex;flex-direction:column;width:min(90vw,400px);max-height:calc(100dvh - 150px);overflow:hidden;border-radius:26px;background:rgba(23,22,28,.92);backdrop-filter:blur(26px) saturate(150%);-webkit-backdrop-filter:blur(26px) saturate(150%);border:1px solid rgba(255,255,255,.12);box-shadow:0 28px 70px rgba(8,7,12,.55);transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s ease">
+      <div data-fab-head="" style="display:flex;flex-direction:column;align-items:center;padding:18px 20px 28px;border-bottom:1px solid rgba(255,255,255,.09)">
+        <div style="display:flex;align-items:center;justify-content:space-between;width:100%;font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,241,245,.5)">
+          <span style="display:flex;gap:16px">
+            <a href="https://instagram.com/moalicreates" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;transition:color .25s ease" style-hover="color:#fff">IG</a>
+            <a href="https://linkedin.com/in/moalicreates" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;transition:color .25s ease" style-hover="color:#fff">LI</a>
+          </span>
+          <a href="https://open.spotify.com/user/moalicreates" target="_blank" rel="noopener" aria-label="Spotify" style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;color:rgba(242,241,245,.62);transition:color .25s ease,background .25s ease" style-hover="color:#fff;background:rgba(255,255,255,.08)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10.25" fill="currentColor"></circle><path d="M6.6 9.1c3.4-.95 7.2-.6 10.1 1.1M7.5 12.2c2.8-.75 5.9-.45 8.3.95M8.4 15.2c2.2-.6 4.5-.35 6.4.7" stroke="#17161c" stroke-width="1.5" stroke-linecap="round"></path></svg>
+          </a>
+        </div>
+        <div style="position:relative;width:96px;height:96px;margin-top:24px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.08)"><image-slot id="nav-avatar-cs" shape="circle" fit="cover" placeholder="Portrait"></image-slot></div>
+        <span style="margin-top:18px;font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:600;letter-spacing:-.02em;color:#f2f1f5">Moe Ali</span>
+        <span style="margin-top:6px;font-size:14px;color:rgba(242,241,245,.58)">Product Designer</span>
+      </div>
+
+      <a href="Moe Ali Portfolio.dc.html#work" data-fab-link="" style="display:flex;align-items:center;gap:12px;padding:16px 22px;color:#f2f1f5;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);transition:background .25s ease" style-hover="background:rgba(255,255,255,.05)">
+        <span style="font-family:'Inter Tight',sans-serif;font-size:19px;font-weight:500;letter-spacing:-.01em">Works</span>
+        <span style="font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(242,241,245,.42)">001</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="margin-left:auto;flex:none;color:rgba(242,241,245,.78)"><path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      <a href="Moe Ali Portfolio.dc.html#services" data-fab-link="" style="display:flex;align-items:center;gap:12px;padding:16px 22px;color:#f2f1f5;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);transition:background .25s ease" style-hover="background:rgba(255,255,255,.05)">
+        <span style="font-family:'Inter Tight',sans-serif;font-size:19px;font-weight:500;letter-spacing:-.01em">Services</span>
+        <span style="font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(242,241,245,.42)">002</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="margin-left:auto;flex:none;color:rgba(242,241,245,.78)"><path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      <a href="Moe Ali Portfolio.dc.html#about" data-fab-link="" style="display:flex;align-items:center;gap:12px;padding:16px 22px;color:#f2f1f5;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);transition:background .25s ease" style-hover="background:rgba(255,255,255,.05)">
+        <span style="font-family:'Inter Tight',sans-serif;font-size:19px;font-weight:500;letter-spacing:-.01em">About Me</span>
+        <span style="font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(242,241,245,.42)">003</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="margin-left:auto;flex:none;color:rgba(242,241,245,.78)"><path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      <a href="Moe Ali Portfolio.dc.html#testimonials" data-fab-link="" style="display:flex;align-items:center;gap:12px;padding:16px 22px;color:#f2f1f5;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);transition:background .25s ease" style-hover="background:rgba(255,255,255,.05)">
+        <span style="font-family:'Inter Tight',sans-serif;font-size:19px;font-weight:500;letter-spacing:-.01em">Testimonials</span>
+        <span style="font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(242,241,245,.42)">004</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="margin-left:auto;flex:none;color:rgba(242,241,245,.78)"><path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      <a href="Playground.dc.html" data-fab-link="" style="display:flex;align-items:center;gap:12px;padding:16px 22px;color:#f2f1f5;text-decoration:none;transition:background .25s ease" style-hover="background:rgba(255,255,255,.05)">
+        <span style="font-family:'Inter Tight',sans-serif;font-size:19px;font-weight:500;letter-spacing:-.01em">Playground</span>
+        <span style="font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(242,241,245,.42)">005</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="margin-left:auto;flex:none;color:rgba(242,241,245,.78)"><path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+
+    </div>
+    <button type="button" data-fab-btn="" aria-label="Open menu" aria-expanded="false" style="pointer-events:auto;width:56px;height:56px;border-radius:999px;background:rgba(16,15,20,.86);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 40px rgba(8,7,12,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 220ms ease-out,transform 140ms cubic-bezier(.23,1,.32,1)" style-active="transform:scale(0.96)">
+      <span aria-hidden="true" style="position:relative;width:18px;height:12px">
+        <span data-fab-bar="0" style="position:absolute;left:0;top:0;width:100%;height:2px;border-radius:2px;background:#fff;transition:transform .24s cubic-bezier(.32,.72,0,1)"></span>
+        <span data-fab-bar="1" style="position:absolute;left:0;top:5px;width:100%;height:2px;border-radius:2px;background:#fff;transition:opacity .14s ease-out"></span>
+        <span data-fab-bar="2" style="position:absolute;left:0;top:10px;width:100%;height:2px;border-radius:2px;background:#fff;transition:transform .24s cubic-bezier(.32,.72,0,1)"></span>
+      </span>
+    </button>
+  </div>
+
+  <main data-screen-label="Case study" style="position:relative;z-index:1;background:#0d0c10;color:#f2f1f5;padding:0 clamp(18px,3vw,40px)">
+    <div data-cs="" style="max-width:1600px;margin:0 auto;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(24px,3.4vw,56px);align-items:start">
+
+      <aside data-cs-panel="" style="position:sticky;top:0;align-self:start;height:100dvh;min-height:100dvh;display:flex;flex-direction:column;justify-content:space-between;gap:clamp(20px,2.6vh,36px);padding:clamp(112px,13vh,148px) 0 clamp(20px,3vh,32px)">
+        <div style="display:flex;flex-direction:column;gap:clamp(18px,2.4vh,30px)">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <a data-cs-back="" href="Moe Ali Portfolio.dc.html#work" style="display:inline-flex;align-items:center;gap:10px;width:fit-content;min-height:44px;font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:rgba(242,241,245,.62);transition:color .3s ease,transform .16s ease-out" style-hover="color:#f2f1f5" style-active="transform:scale(0.97)"><span aria-hidden="true">←</span><span data-split="">Back to work</span></a>
+            <span aria-hidden="true" style="display:block;height:1px;width:100%;background:rgba(255,255,255,.12)"></span>
+          </div>
+          <div data-cs-identity="" style="display:flex;flex-direction:column;gap:22px;animation:fadeUp .9s cubic-bezier(.22,1,.36,1) both">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <h1 style="margin:0;font-family:'Inter Tight',sans-serif;font-weight:500;font-size:clamp(36px,3.3vw,52px);line-height:1.04;letter-spacing:-.022em"><x-import component="DecryptedText" from="./DecryptedText.jsx" text="{{ title }}" animate-on="view" speed="{{ 36 }}" max-iterations="{{ 10 }}" sequential="{{ true }}" reveal-direction="start" use-original-chars-only="{{ false }}" characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" hint-size="auto,1em"></x-import></h1>
+              <p style="margin:0;max-width:34ch;font-size:clamp(16px,1.15vw,18px);line-height:1.5;color:rgba(242,241,245,.58);text-wrap:pretty">{{ tagline }}</p>
+            </div>
+            <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ services }}" as="svc" hint-placeholder-count="3">
+                <li style="display:flex;gap:9px;font-size:15px;line-height:1.4;color:rgba(242,241,245,.52)"><span aria-hidden="true" style="color:rgba(242,241,245,.32)">·</span><span>{{ svc }}</span></li>
+              </sc-for>
+            </ul>
+            <div style="display:flex;align-items:center;gap:10px;font-family:'Martian Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:rgba(242,241,245,.34)"><span>{{ year }}</span><span aria-hidden="true">—</span><span>{{ kind }}</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:clamp(16px,2vh,24px)">
+          <div role="tablist" aria-label="Project narrative" style="display:flex;flex-wrap:nowrap;gap:clamp(10px,1.1vw,20px);overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.14);scrollbar-width:none">
+            <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="4">
+              <button role="tab" aria-selected="{{ tab.selected }}" aria-controls="{{ tab.panelId }}" onClick="{{ tab.onSelect }}" style="{{ tab.style }}" style-hover="opacity:1" style-active="transform:scale(0.97)"><span>{{ tab.label }}</span><span aria-hidden="true" style="{{ tab.barStyle }}"></span></button>
+            </sc-for>
+          </div>
+          <div style="display:grid;min-height:8.6em">
+            <sc-for list="{{ panels }}" as="pan" hint-placeholder-count="1">
+              <p role="tabpanel" id="{{ pan.id }}" style="{{ pan.style }}">{{ pan.text }}</p>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span aria-hidden="true" style="display:block;height:1px;width:100%;background:rgba(255,255,255,.12)"></span>
+          <a href="Moe Ali Portfolio.dc.html#work" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:rgba(242,241,245,.55);transition:color .3s ease,transform .16s ease-out" style-hover="color:#f2f1f5" style-active="transform:scale(0.97)"><span data-split="">All works</span></a>
+        </div>
+      </aside>
+
+      <section data-cs-gallery="" aria-label="Project media" style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,24px);padding:clamp(112px,13vh,148px) 0 clamp(72px,8vw,120px)">
+        <sc-for list="{{ items }}" as="item" hint-placeholder-count="6">
+          <div data-cs-item="" data-layout="{{ item.layout }}" style="{{ item.style }}"><image-slot id="{{ item.slot }}" shape="rect" fit="cover" placeholder="{{ item.ph }}"></image-slot></div>
+        </sc-for>
+      </section>
+    </div>
+
+    <section data-cs-nav="" aria-label="Next and previous projects" style="max-width:1600px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr">
+      <a data-cs-navlink="" data-dir="prev" href="{{ prevHref }}" style="position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:clamp(40px,6vw,88px) clamp(20px,3vw,48px);border-right:1px solid rgba(255,255,255,.12);color:#f2f1f5">
+        <div data-cs-navimg="" aria-hidden="true" style="position:absolute;inset:0;opacity:0;transition:opacity .5s cubic-bezier(.23,1,.32,1)">
+          <image-slot id="{{ prevCover }}" shape="rect" fit="cover" placeholder="{{ prevTitle }} cover"></image-slot>
+          <span aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,12,16,.55),rgba(13,12,16,.9))"></span>
+        </div>
+        <span style="position:relative;display:flex;align-items:center;gap:10px;font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:rgba(242,241,245,.55)"><span data-cs-navarrow="" aria-hidden="true" style="display:inline-block;transition:transform .3s cubic-bezier(.23,1,.32,1)">←</span>Previous project</span>
+        <span style="position:relative;font-family:'Druk','Inter Tight',sans-serif;font-weight:500;font-size:clamp(30px,3.4vw,56px);line-height:.88;letter-spacing:-.01em;text-transform:uppercase"><x-import component="DecryptedText" from="./DecryptedText.jsx" text="{{ prevTitle }}" animate-on="hover" hover-target="card" speed="{{ 30 }}" max-iterations="{{ 10 }}" sequential="{{ true }}" reveal-direction="start" use-original-chars-only="{{ false }}" characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/#*" hint-size="auto,1em"></x-import></span>
+      </a>
+      <a data-cs-navlink="" data-dir="next" href="{{ nextHref }}" style="position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;text-align:right;gap:14px;padding:clamp(40px,6vw,88px) clamp(20px,3vw,48px);color:#f2f1f5">
+        <div data-cs-navimg="" aria-hidden="true" style="position:absolute;inset:0;opacity:0;transition:opacity .5s cubic-bezier(.23,1,.32,1)">
+          <image-slot id="{{ nextCover }}" shape="rect" fit="cover" placeholder="{{ nextTitle }} cover"></image-slot>
+          <span aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,12,16,.55),rgba(13,12,16,.9))"></span>
+        </div>
+        <span style="position:relative;display:flex;align-items:center;gap:10px;font-family:'Martian Mono',monospace;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:rgba(242,241,245,.55)">Next project<span data-cs-navarrow="" aria-hidden="true" style="display:inline-block;transition:transform .3s cubic-bezier(.23,1,.32,1)">→</span></span>
+        <span style="position:relative;font-family:'Druk','Inter Tight',sans-serif;font-weight:500;font-size:clamp(30px,3.4vw,56px);line-height:.88;letter-spacing:-.01em;text-transform:uppercase"><x-import component="DecryptedText" from="./DecryptedText.jsx" text="{{ nextTitle }}" animate-on="hover" hover-target="card" speed="{{ 30 }}" max-iterations="{{ 10 }}" sequential="{{ true }}" reveal-direction="start" use-original-chars-only="{{ false }}" characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/#*" hint-size="auto,1em"></x-import></span>
+      </a>
+    </section>
+  </main>
+
+  <section data-screen-label="Footer" style="background:#0a0a0b;color:#f4f4f2;padding:clamp(64px,8vw,110px) clamp(18px,3vw,40px) 34px">
+    <div style="max-width:1600px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(40px,6vh,72px)">
+      <div data-footer-cols="" style="display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:48px">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <span style="font-family:'Martian Mono',monospace;font-size:13px;letter-spacing:0.034em;text-transform:uppercase;color:rgba(244,244,242,.42)">/Reach me</span>
+          <a href="mailto:moalicreates@gmail.com" style="font-size:20px;line-height:1.55;color:#f4f4f2;width:fit-content;transition:color .3s ease;font-size:clamp(20px,1.7vw,26px)" style-hover="color:var(--accent)">moalicreates@gmail.com</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span style="font-family:'Martian Mono',monospace;font-size:13px;letter-spacing:0.034em;text-transform:uppercase;color:rgba(244,244,242,.42);margin-bottom:4px">/Navigate to</span>
+          <a href="Moe Ali Portfolio.dc.html" style="font-size:20px;line-height:1.55;color:#f4f4f2;width:fit-content;transition:color .3s ease" style-hover="color:var(--accent)">Home</a>
+          <a href="Moe Ali Portfolio.dc.html#work" style="font-size:20px;line-height:1.55;color:#f4f4f2;width:fit-content;transition:color .3s ease" style-hover="color:var(--accent)">Selected works</a>
+          <a href="Moe Ali Portfolio.dc.html#about" style="font-size:20px;line-height:1.55;color:#f4f4f2;width:fit-content;transition:color .3s ease" style-hover="color:var(--accent)">Info</a>
+          <a href="Playground.dc.html" style="font-size:20px;line-height:1.55;color:#f4f4f2;width:fit-content;transition:color .3s ease" style-hover="color:var(--accent)">Playground</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <span style="font-family:'Martian Mono',monospace;font-size:13px;letter-spacing:0.034em;text-transform:uppercase;color:rgba(244,244,242,.42);margin-bottom:4px">/Stalk me:)</span>
+          <a href="https://www.linkedin.com/in/moe-uix/" target="_blank" rel="noopener" style="font-size:20px;line-height:1.55;color:#f4f4f2;width:fit-content;transition:color .3s ease" style-hover="color:var(--accent)">LinkedIn</a>
+          <a href="Moe Ali Portfolio.dc.html#resume" style="font-size:20px;line-height:1.55;color:#f4f4f2;width:fit-content;transition:color .3s ease" style-hover="color:var(--accent)">My resume</a>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:clamp(24px,4vw,64px)">
+        <div style="flex:none;font-size:40px;line-height:.92;letter-spacing:-.045em;font-weight:500;color:rgba(244,244,242,.46)"><dc-import name="SectionHeading" text="Let's create together" hint-size="auto,140px"></dc-import></div>
+        <span aria-hidden="true" style="flex:1;height:1px;background:rgba(244,244,242,.22)"></span>
+        <a href="https://calendly.com/moalicreates/30min" target="_blank" rel="noopener" aria-label="Book a call" class="shiny-cta" style="display:flex;align-items:center;justify-content:center;flex:none;width:clamp(88px,7vw,124px);height:clamp(56px,4.4vw,76px);border-radius:999px;--cta-bg:#f4f4f2;color:#0a0a0b;" style-hover="--cta-bg:var(--accent);color:#fff;transform:translateX(6px)">
+          <svg width="34" height="16" viewBox="0 0 34 16" fill="none" aria-hidden="true"><path d="M25 1.5 32 8l-7 6.5M32 8H2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px">
+        <div style="display:flex;flex-wrap:wrap;gap:clamp(20px,3vw,44px)">
+          <a href="https://twitter.com" target="_blank" rel="noopener" style="font-family:'Martian Mono',monospace;font-size:13px;letter-spacing:0.041em;text-transform:uppercase;color:rgba(244,244,242,.55);transition:color .3s ease" style-hover="color:#f4f4f2">Twitter ↗</a>
+          <a href="https://www.behance.net" target="_blank" rel="noopener" style="font-family:'Martian Mono',monospace;font-size:13px;letter-spacing:0.041em;text-transform:uppercase;color:rgba(244,244,242,.55);transition:color .3s ease" style-hover="color:#f4f4f2">Behance ↗</a>
+          <a href="https://www.linkedin.com/in/moe-uix/" target="_blank" rel="noopener" style="font-family:'Martian Mono',monospace;font-size:13px;letter-spacing:0.041em;text-transform:uppercase;color:rgba(244,244,242,.55);transition:color .3s ease" style-hover="color:#f4f4f2">LinkedIn ↗</a>
+        </div>
+        <span style="font-family:'Martian Mono',monospace;font-size:13px;letter-spacing:0.041em;text-transform:uppercase;color:rgba(244,244,242,.55);transition:color .3s ease">Designed &amp; built with <span style="color:#e8b84b">♥</span> by me</span>
+      </div>
+    </div>
+  </section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;project&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;ledger&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;ledger&quot;,&quot;halo-health&quot;,&quot;frame&quot;,&quot;northbeam&quot;,&quot;arcadia&quot;,&quot;two-rivers&quot;],&quot;section&quot;:&quot;Content&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#7c4dff&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#7c4dff&quot;,&quot;#b8452f&quot;,&quot;#2f6f5e&quot;,&quot;#c2a04a&quot;],&quot;section&quot;:&quot;Theme&quot;}}">
+class Component extends DCLogic {
+  // Mobile/tablet floating menu: hamburger morphs to X, glass panel pops up
+  // from the FAB holding the nav links (nav bar itself hides them <=860px).
+  setupFab() {
+    const wrap = document.querySelector('[data-fab-wrap]');
+    const btn = document.querySelector('[data-fab-btn]');
+    const menu = document.querySelector('[data-fab-menu]');
+    if (!wrap || !btn || !menu) return;
+    const bars = Array.from(btn.querySelectorAll('[data-fab-bar]'));
+    const rows = Array.from(menu.querySelectorAll('[data-fab-head], [data-fab-link]'));
+    const soft = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    rows.forEach((r) => { r.style.opacity = '0'; });
+    // Pixel endpoints on both sides of the clip transition: interpolating calc()/%
+    // against px is what browsers do least smoothly here.
+    const closedClip = () => {
+      const r = menu.getBoundingClientRect();
+      const t = Math.max(0, Math.round(r.height - 56));
+      const x = Math.max(0, Math.round((r.width - 56) / 2));
+      return 'inset(' + t + 'px ' + x + 'px 0px ' + x + 'px round 28px)';
+    };
+    if (!soft) requestAnimationFrame(() => { menu.style.clipPath = closedClip(); });
+    window.addEventListener('resize', () => { if (!open && !soft) menu.style.clipPath = closedClip(); }, { passive: true });
+    let open = false;
+    const setOpen = (v) => {
+      open = v;
+      btn.setAttribute('aria-expanded', String(v));
+      // The panel grows out of the FAB's own footprint: a 56px pill of clip expands
+      // to the full sheet on the iOS drawer curve. Enter is unhurried, exit quicker.
+      // Only clip + transform + opacity move — no blur on a backdrop-filter surface,
+      // which is what made the open stutter while the close stayed clean.
+      const D = v ? 380 : 220;
+      const E = 'cubic-bezier(.32,.72,0,1)';
+      menu.style.transition = soft
+        ? 'opacity ' + (v ? 240 : 160) + 'ms ease-out'
+        : 'clip-path ' + D + 'ms ' + E + ', transform ' + D + 'ms ' + E +
+          ', opacity ' + (v ? 160 : 150) + 'ms ease-out';
+      menu.style.willChange = 'transform, clip-path, opacity';
+      // Scrolling only switches on once the sheet has settled — enabling it mid-clip
+      // makes a scrollbar flash in and out as the staggered rows overflow the box.
+      menu.style.overflowY = 'hidden';
+      clearTimeout(this._fabT);
+      this._fabT = setTimeout(() => {
+        menu.style.willChange = 'auto';
+        if (v) menu.style.overflowY = 'auto';
+      }, D + 340);
+      menu.style.opacity = v ? '1' : '0';
+      menu.style.pointerEvents = v ? 'auto' : 'none';
+      if (!soft) {
+        menu.style.transform = v ? 'scale(1) translateY(0)' : 'scale(.985) translateY(6px)';
+        menu.style.clipPath = v ? 'inset(0px 0px 0px 0px round 26px)' : closedClip();
+      }
+      // Content fades only — moving each row as well as the sheet meant two
+      // repaints per frame on the same pixels.
+      rows.forEach((r, i) => {
+        r.style.transition = 'opacity ' + (v ? 200 : 120) + 'ms ease-out';
+        r.style.transitionDelay = (v ? 90 + i * 24 : 0) + 'ms';
+        r.style.opacity = v ? '1' : '0';
+      });
+      btn.style.background = v ? 'var(--accent)' : 'rgba(16,15,20,.86)';
+      if (bars[0]) bars[0].style.transform = v ? 'translateY(5px) rotate(45deg)' : 'none';
+      if (bars[1]) bars[1].style.opacity = v ? '0' : '1';
+      if (bars[2]) bars[2].style.transform = v ? 'translateY(-5px) rotate(-45deg)' : 'none';
+    };
+    btn.addEventListener('click', () => setOpen(!open));
+    menu.querySelectorAll('[data-fab-link]').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('click', (e) => { if (open && !wrap.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) setOpen(false); });
+  }
+  state = { stage: 0 };
+  static LABELS = ['Challenge', 'Approach', 'Outcome', 'What we did'];
+  static ORDER = ['ledger', 'halo-health', 'frame', 'northbeam', 'arcadia', 'two-rivers'];
+  static DATA = {
+    'ledger': { num: '01', year: '2025', title: 'Ledger', kind: 'Fintech dashboard', cover: 'work-1',
+      tagline: 'A treasury and trading dashboard rebuilt around the numbers operators actually watch.',
+      services: ['Product design', 'Design system', 'Data visualization'], live: 'https://ledger.example.com',
+      narrative: [
+        'Ledger\u2019s operators lived in spreadsheet exports because the dashboard buried the four numbers they checked hourly under three layers of navigation. Trust in the product was eroding one CSV at a time.',
+        'We shadowed six operators for a week, ranked every metric by how often it was actually read, and rebuilt the information architecture around that ranking \u2014 loudest numbers first, everything else one level down.',
+        'Daily active use of the dashboard tripled within a quarter and the export button\u2019s click rate fell by 80%. The ops team retired two internal spreadsheets outright.',
+        'End-to-end product design: research, IA, a refreshed component library with dense-data tables and charts, and specced handoff shipped alongside the engineering team.'
+      ] },
+    'halo-health': { num: '02', year: '2024', title: 'Halo Health', kind: 'Care coordination', cover: 'work-2',
+      tagline: 'One design system for the nurses, schedulers, and families coordinating care across three products.',
+      services: ['Design system', 'Web app', 'Accessibility'], live: 'https://halohealth.example.com',
+      narrative: [
+        'Three products, three grays, three date pickers. Halo\u2019s teams were shipping fast but every surface looked and behaved like a different company \u2014 and clinical users paid for it in errors.',
+        'We built the system from the highest-risk flows outward: tokens and components were earned by appearing in a real screen, never invented in the abstract. Every pattern shipped with an accessibility contract.',
+        'Two years on, the system is still the reason Halo ships fast \u2014 two engineers can stand up a new surface in a day. Form-error rates in scheduling dropped by half.',
+        'Token architecture, a 40-component library, WCAG AA audits, contribution guidelines, and the governance rituals that keep a system alive after the designers leave.'
+      ] },
+    'frame': { num: '03', year: '2024', title: 'Frame', kind: 'Video editing tool', cover: 'work-3',
+      tagline: 'A desktop video editor for people who have thirty minutes, not a film degree.',
+      services: ['Product design', '0 \u2192 1', 'Interaction design'], live: 'https://frame.example.com',
+      narrative: [
+        'Every prosumer editor assumes you know what a keyframe is. Frame\u2019s founding bet was that most people cutting video for work never will \u2014 and shouldn\u2019t have to.',
+        'We prototyped the timeline in code from week one and tested it with real footage weekly. Anything that needed a tooltip to explain got redesigned until it didn\u2019t.',
+        'Beta users cut their first publishable video in a median of 19 minutes. The timeline interaction model survived from prototype to launch essentially unchanged.',
+        'Zero-to-one product definition, interaction and motion design for the timeline and inspector, and a desktop-grade design language built alongside two engineers.'
+      ] },
+    'northbeam': { num: '04', year: '2023', title: 'Northbeam', kind: 'Marketing attribution', cover: 'work-4',
+      tagline: 'Attribution data made legible \u2014 and a brand that stopped apologizing for being technical.',
+      services: ['UX design', 'Brand', 'Marketing site'], live: 'https://northbeam.example.com',
+      narrative: [
+        'Northbeam\u2019s models were the best in the category and their interface was the hardest to read. Prospects churned in the trial before ever seeing the numbers that would have sold them.',
+        'We rebuilt the reporting views around questions marketers actually ask \u2014 \u201cwhat should I spend more on?\u201d \u2014 and extended the sharpened voice into a brand and site refresh.',
+        'Trial-to-paid conversion moved 31% in the two quarters after launch. Sales started demoing the product live instead of leading with slide decks.',
+        'Reporting UX overhaul, navigation redesign, brand refinement, and an editorial marketing site \u2014 shipped with in-house engineering over five months.'
+      ] },
+    'arcadia': { num: '05', year: '2023', title: 'Arcadia', kind: 'Membership platform', cover: 'work-5',
+      tagline: 'A mobile membership experience that feels like a club, not a billing portal.',
+      services: ['Mobile design', 'Product design', 'Motion'], live: 'https://arcadia.example.com',
+      narrative: [
+        'Arcadia sold belonging but the app opened on an invoice. Renewal rates said members felt like account numbers \u2014 because the product treated them like account numbers.',
+        'We reordered the entire app around member moments \u2014 events, spaces, people \u2014 and pushed billing to where it belongs: one tap away, never first. Motion was used sparingly, only where it made the club feel alive.',
+        'Thirty-day retention rose 22% and event RSVPs through the app doubled. Support tickets about \u201cwhere do I find\u2026\u201d dropped to near zero.',
+        'Mobile product design end to end: research, flows, a native component kit for iOS and Android, and motion specs tight enough to build from.'
+      ] },
+    'two-rivers': { num: '06', year: '2022', title: 'Two Rivers', kind: 'Field operations', cover: 'work-6',
+      tagline: 'Enterprise field software that works with gloves on, in the rain, offline.',
+      services: ['Mobile', 'Web', 'Enterprise UX'], live: 'https://tworivers.example.com',
+      narrative: [
+        'Crews filled out paper forms in the field and re-typed them at the depot. The software existed \u2014 nobody used it, because it was designed for a desk that field techs never sit at.',
+        'We rode along with crews for two weeks and designed for the worst case first: offline, one-handed, gloved, in glare. Every screen had to survive a 44px-minimum, three-tap budget.',
+        'Paper forms were retired across 14 depots within a year. Data lag from field to office went from days to minutes, and adoption held above 90% without mandates.',
+        'Field research, offline-first mobile UX, a web console for dispatchers, and an enterprise design language now used across three product lines.'
+      ] }
+  };
+  slug() {
+    const q = new URLSearchParams(window.location.search).get('p');
+    const D = Component.DATA;
+    if (q && D[q]) return q;
+    const p = this.props.project;
+    if (p && D[p]) return p;
+    return 'ledger';
+  }
+  reduce() { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  setStage(i) { if (i !== this.state.stage) this.setState({ stage: i }); }
+  renderVals() {
+    const slug = this.slug();
+    const p = Component.DATA[slug];
+    const order = Component.ORDER;
+    const idx = order.indexOf(slug);
+    const next = order[(idx + 1) % order.length];
+    const prev = order[(idx - 1 + order.length) % order.length];
+    const active = this.state.stage;
+    const soft = this.reduce();
+    const tabs = Component.LABELS.map((label, i) => ({
+      label, selected: i === active, panelId: 'cs-pan-' + i,
+      onSelect: () => this.setStage(i),
+      style: {
+        position: 'relative', appearance: 'none', background: 'none', border: 'none', cursor: 'pointer',
+        padding: '0 2px 14px', minHeight: '44px', whiteSpace: 'nowrap',
+        fontFamily: "'Martian Mono', monospace", fontSize: '11px', letterSpacing: '0.06em',
+        textTransform: 'uppercase', color: '#f2f1f5',
+        opacity: i === active ? 1 : 0.34,
+        transition: 'opacity .3s cubic-bezier(.23,1,.32,1)'
+      },
+      barStyle: {
+        position: 'absolute', left: 0, right: 0, bottom: '-1px', height: '1px',
+        background: 'var(--accent)', transformOrigin: 'left center',
+        transform: i === active ? 'scaleX(1)' : 'scaleX(0)',
+        transition: soft ? 'opacity .2s ease' : 'transform .35s cubic-bezier(.23,1,.32,1)'
+      }
+    }));
+    const panels = p.narrative.map((text, i) => ({
+      text, id: 'cs-pan-' + i,
+      style: {
+        gridArea: '1 / 1', margin: 0, maxWidth: '46ch',
+        fontSize: 'clamp(15px,1.1vw,17px)', lineHeight: 1.65, color: 'rgba(242,241,245,.66)', textWrap: 'pretty',
+        opacity: i === active ? 1 : 0,
+        visibility: i === active ? 'visible' : 'hidden',
+        pointerEvents: i === active ? 'auto' : 'none',
+        transition: soft ? 'opacity .2s ease, visibility .2s' : 'opacity .5s cubic-bezier(.23,1,.32,1), visibility .5s'
+      }
+    }));
+    const pattern = [
+      ['full', '16 / 9'], ['full', '16 / 9'], ['half', '1 / 1'], ['half', '1 / 1'],
+      ['full', '16 / 9'], ['half', '4 / 3'], ['half', '4 / 3'], ['full', '16 / 9']
+    ];
+    const items = pattern.map(([layout, ratio], i) => ({
+      layout,
+      slot: i === 0 ? p.cover : 'cs-' + slug + '-' + (i + 1),
+      ph: p.title + ' \u2014 media 0' + (i + 1),
+      style: {
+        position: 'relative', overflow: 'hidden', borderRadius: '8px', background: '#17161c',
+        aspectRatio: ratio, gridColumn: layout === 'full' ? '1 / -1' : 'span 1',
+        opacity: soft ? 1 : 0, transform: soft ? 'none' : 'translateY(28px)',
+        transition: soft ? 'opacity .3s ease' : ('opacity .8s cubic-bezier(.22,1,.36,1) ' + ((i % 2) * 90) + 'ms, transform .8s cubic-bezier(.22,1,.36,1) ' + ((i % 2) * 90) + 'ms'),
+        willChange: 'transform, opacity'
+      }
+    }));
+    return {
+      num: p.num, year: p.year, title: p.title, kind: p.kind, tagline: p.tagline,
+      services: p.services,
+      nextTitle: Component.DATA[next].title, nextHref: 'Project.dc.html?p=' + next, nextCover: Component.DATA[next].cover,
+      prevTitle: Component.DATA[prev].title, prevHref: 'Project.dc.html?p=' + prev, prevCover: Component.DATA[prev].cover,
+      tabs, panels, items
+    };
+  }
+  componentDidMount() {
+    document.title = Component.DATA[this.slug()].title + ' \u2014 Moe Ali';
+    if (this.props.accentColor) document.documentElement.style.setProperty('--accent', this.props.accentColor);
+    if (this.reduce()) {
+      const idBlock = document.querySelector('[data-cs-identity]');
+      if (idBlock) idBlock.style.animation = 'fadeOpacity .2s ease both';
+    }
+    this.applyLayout = this.applyLayout.bind(this);
+    this.applyLayout();
+    window.addEventListener('resize', this.applyLayout, { passive: true });
+    this.setupScrollSync();
+    this.setupFab();
+    this.setupSplitLinks();
+    this.setupGalleryFade();
+    this.setupNavPeek();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.applyLayout);
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll, { capture: true });
+  }
+  applyLayout() {
+    const grid = document.querySelector('[data-cs]');
+    const panel = document.querySelector('[data-cs-panel]');
+    if (!grid || !panel) return;
+    const w = window.innerWidth;
+    if (w >= 1280) grid.style.gridTemplateColumns = 'minmax(0,4fr) minmax(0,8fr)';
+    else if (w >= 1024) grid.style.gridTemplateColumns = 'minmax(0,5fr) minmax(0,7fr)';
+    else grid.style.gridTemplateColumns = 'minmax(0,1fr)';
+    if (w >= 1024) {
+      panel.style.position = 'sticky';
+      panel.style.height = '100dvh';
+      panel.style.minHeight = '100dvh';
+    } else {
+      panel.style.position = 'static';
+      panel.style.height = 'auto';
+      panel.style.minHeight = '0';
+    }
+    const gallery = document.querySelector('[data-cs-gallery]');
+    // The template sets `padding` as a shorthand, so clearing the longhand zeroes the top
+    // gap; set it explicitly instead — desktop keeps the gallery level with "Back to work".
+    if (gallery) gallery.style.paddingTop = w >= 1024 ? 'clamp(112px,13vh,148px)' : '0px';
+    document.querySelectorAll('[data-cs-item][data-layout="half"]').forEach((el) => {
+      el.style.gridColumn = w < 640 ? '1 / -1' : 'span 1';
+    });
+    const navSection = document.querySelector('[data-cs-nav]');
+    if (navSection) navSection.style.gridTemplateColumns = w < 768 ? '1fr' : '1fr 1fr';
+    const prevLink = document.querySelector('[data-cs-navlink][data-dir="prev"]');
+    if (prevLink) {
+      prevLink.style.borderRight = w < 768 ? 'none' : '1px solid rgba(255,255,255,.12)';
+      prevLink.style.borderBottom = w < 768 ? '1px solid rgba(255,255,255,.12)' : 'none';
+    }
+    const nextLink = document.querySelector('[data-cs-navlink][data-dir="next"]');
+    if (nextLink) {
+      nextLink.style.alignItems = w < 768 ? 'flex-start' : 'flex-end';
+      nextLink.style.textAlign = w < 768 ? 'left' : 'right';
+    }
+  }
+  // Gallery progress drives the narrative on desktop; a stage only updates when
+  // its band actually changes, so clicks hold until scroll crosses a boundary.
+  setupScrollSync() {
+    const gallery = document.querySelector('[data-cs-gallery]');
+    if (!gallery) return;
+    let last = 0, ticking = false;
+    const frame = () => {
+      ticking = false;
+      if (window.innerWidth < 1024) return;
+      const r = gallery.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const span = Math.max(1, r.height - vh * 0.6);
+      const t = Math.max(0, Math.min(0.999, (vh * 0.6 - r.top) / span));
+      const stage = Math.min(3, Math.floor(t * 4));
+      if (stage !== last) { last = stage; this.setStage(stage); }
+    };
+    this._onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+    window.addEventListener('scroll', this._onScroll, { passive: true, capture: true });
+    frame();
+  }
+  // Layered per-character link hover: original glyphs exit up, clones enter from
+  // below on an 18ms stagger. Pointer-fine only, skipped under reduced motion.
+  setupSplitLinks() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches || this.reduce()) return;
+    document.querySelectorAll('[data-split]').forEach((el) => {
+      const text = el.textContent;
+      el.textContent = '';
+      el.style.position = 'relative';
+      el.style.display = 'inline-block';
+      const mkRow = (hidden) => {
+        const row = document.createElement('span');
+        row.style.display = 'inline-block';
+        row.style.whiteSpace = 'pre';
+        if (hidden) { row.style.position = 'absolute'; row.style.inset = '0'; row.setAttribute('aria-hidden', 'true'); }
+        Array.from(text).forEach((ch, i) => {
+          const sp = document.createElement('span');
+          sp.textContent = ch === ' ' ? '\u00A0' : ch;
+          sp.style.display = 'inline-block';
+          sp.style.transition = 'transform .34s cubic-bezier(.23,1,.32,1) ' + (i * 18) + 'ms, opacity .28s ease ' + (i * 18) + 'ms';
+          if (hidden) { sp.style.transform = 'translateY(0.55em)'; sp.style.opacity = '0'; }
+          row.appendChild(sp);
+        });
+        return row;
+      };
+      const a = mkRow(false), b = mkRow(true);
+      el.appendChild(a); el.appendChild(b);
+      const host = el.closest('a') || el;
+      host.addEventListener('pointerenter', () => {
+        Array.from(a.children).forEach((sp) => { sp.style.transform = 'translateY(-0.55em)'; sp.style.opacity = '0'; });
+        Array.from(b.children).forEach((sp) => { sp.style.transform = 'translateY(0)'; sp.style.opacity = '1'; });
+      });
+      host.addEventListener('pointerleave', () => {
+        Array.from(a.children).forEach((sp) => { sp.style.transform = 'translateY(0)'; sp.style.opacity = '1'; });
+        Array.from(b.children).forEach((sp) => { sp.style.transform = 'translateY(0.55em)'; sp.style.opacity = '0'; });
+      });
+    });
+  }
+  // Gallery items fade up individually as they cross into view; reduced-motion renders
+  // them fully visible from the start (see renderVals) so this observer is skipped.
+  setupGalleryFade() {
+    if (this.reduce()) return;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'none';
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('[data-cs-item]').forEach((el) => obs.observe(el));
+  }
+  setupNavPeek() {
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    document.querySelectorAll('[data-cs-navlink]').forEach((link) => {
+      const img = link.querySelector('[data-cs-navimg]');
+      const arrow = link.querySelector('[data-cs-navarrow]');
+      const dir = link.getAttribute('data-dir');
+      link.addEventListener('pointerenter', () => {
+        if (img) img.style.opacity = '0.4';
+        if (arrow && canHover && !this.reduce()) arrow.style.transform = dir === 'prev' ? 'translateX(-4px)' : 'translateX(4px)';
+      });
+      link.addEventListener('pointerleave', () => {
+        if (img) img.style.opacity = '0';
+        if (arrow) arrow.style.transform = '';
+      });
+    });
+  }
+}
+</script>
+</body>
+</html>
