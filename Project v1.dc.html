@@ -83,6 +83,9 @@ button { font-family: inherit; }
 @media (max-width: 560px) {
   [data-footer-cols] { grid-template-columns: 1fr !important; }
 }
+/* image-slot ships a dashed ring on its empty state as a drop-target hint. Not
+   wanted anywhere on this site — empty slots read as plain panels instead. */
+image-slot::part(ring) { display: none; }
 </style>
 </helmet>
 

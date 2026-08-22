@@ -70,11 +70,9 @@ a:hover { color: var(--accent); }
 @media (max-width: 860px) {
   [data-nav-links], [data-nav-secondary] { display: none !important; }
 }
-/* image-slot draws a dashed ring on its empty state as a drop-target hint. On this
-   canvas the tiles read as artwork, not upload targets, so the dotted outline just
-   adds noise around the slots still waiting on images. Scoped to the tiles so the
-   other pages keep their placeholder affordance. */
-[data-pg-tile] image-slot::part(ring) { display: none; }
+/* image-slot ships a dashed ring on its empty state as a drop-target hint. Not
+   wanted anywhere on this site — empty slots read as plain panels instead. */
+image-slot::part(ring) { display: none; }
 /* Playground reticle cursor. The ring trails the pointer on a spring while the dot
    pins to the true position — the gap between them is what reads as depth. Chevrons
    carry the "pan in any direction" affordance the old text label used to spell out. */

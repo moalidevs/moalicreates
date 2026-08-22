@@ -231,6 +231,9 @@ image-slot::part(image) { touch-action: pan-y !important; }
   [data-hero-portrait] { width: var(--fig-w) !important; max-width: none !important; translate: 4% var(--par-y, 0px) !important; }
   [data-hero-scroll] { display: none !important; }
 }
+/* image-slot ships a dashed ring on its empty state as a drop-target hint. Not
+   wanted anywhere on this site — empty slots read as plain panels instead. */
+image-slot::part(ring) { display: none; }
 </style>
 </helmet>
 
