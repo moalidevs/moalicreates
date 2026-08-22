@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/Moe%20Ali%20Portfolio.dc.html" }
+  ]
+}
