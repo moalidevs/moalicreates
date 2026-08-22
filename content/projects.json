@@ -1,0 +1,435 @@
+{
+  "$about": [
+    "Index of every project's images, for fast lookup when asked to replace one.",
+    "This is a reference file only -- nothing on the live site reads it. The site",
+    "is static .dc.html with no component framework and no build step, so the",
+    "actual source of truth stays where it already lived: Moe Ali Portfolio.dc.html",
+    "(homepage cards) and Project.dc.html's Component.DATA object (case-study copy).",
+    "This file exists so those two places don't have to be re-read from scratch",
+    "every time -- it is kept in sync by hand whenever an image or copy changes."
+  ],
+  "$imageMechanics": [
+    "Every image is an <image-slot id=\"...\"> custom element, not a plain <img>.",
+    "Two ways a slot gets a picture, in priority order:",
+    "  1. .image-slots.state.json[slotId].u -- a dropped-in image (base64), set",
+    "     via the Claude Design canvas UI. This WINS if present, silently, even",
+    "     if the tag also has a src= attribute.",
+    "  2. The slot tag's own src=\"uploads/...\" attribute -- the fallback used",
+    "     when no sidecar entry exists. This is what a manual file edit controls.",
+    "So: before editing a src= attribute and wondering why nothing changed,",
+    "check whether .image-slots.state.json already has an entry for that slot id.",
+    "Cover slot ids (work-1..work-6) are SHARED between the homepage grid card",
+    "and that project's case-study hero -- filling one fills both automatically.",
+    "Gallery slots (cs-<slug>-2..8) exist ONLY inside Project.dc.html's template",
+    "as {{ slot2 }}..{{ slot8 }} -- they have no src= attribute in the markup at",
+    "all, so they can only ever be filled via the sidecar, never by editing HTML.",
+    "Wide/square pairs (work-3/work-3-sq, work-6/work-6-sq) both need filling --",
+    "the square crop is what actually shows below 860px viewport width."
+  ],
+  "order": [
+    "ledger",
+    "halo-health",
+    "frame",
+    "mahsouly",
+    "arcadia",
+    "lime"
+  ],
+  "projects": {
+    "ledger": {
+      "num": "01",
+      "year": "2026",
+      "title": "Ledger",
+      "kind": "Fintech dashboard",
+      "homepage": {
+        "file": "Moe Ali Portfolio.dc.html",
+        "cardPosition": "1 of 6",
+        "linksTo": "Project.dc.html?p=ledger"
+      },
+      "caseStudy": {
+        "file": "Project.dc.html",
+        "url": "Project.dc.html?p=ledger",
+        "dataEntry": "Component.DATA['ledger'] -- title, tagline, services[], live, narrative[4]"
+      },
+      "images": {
+        "cover": {
+          "slot": "work-1",
+          "currentSrc": "uploads/Studio Desk iPhone Mockup.webp",
+          "status": "filled"
+        },
+        "gallery": [
+          {
+            "slot": "cs-ledger-2",
+            "label": "foundations (chapter 1, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-ledger-3",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-ledger-4",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-ledger-5",
+            "label": "what shipped (chapter 2, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-ledger-6",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-ledger-7",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-ledger-8",
+            "label": "where it landed (chapter 3, wide)",
+            "status": "empty (shows placeholder)"
+          }
+        ]
+      },
+      "video": {
+        "file": "uploads/work-1.webm",
+        "status": "referenced but file missing (404) -- optional hover loop, page tolerates its absence"
+      }
+    },
+    "halo-health": {
+      "num": "02",
+      "year": "2026",
+      "title": "Halo Health",
+      "kind": "Care coordination",
+      "homepage": {
+        "file": "Moe Ali Portfolio.dc.html",
+        "cardPosition": "2 of 6",
+        "linksTo": "Project.dc.html?p=halo-health"
+      },
+      "caseStudy": {
+        "file": "Project.dc.html",
+        "url": "Project.dc.html?p=halo-health",
+        "dataEntry": "Component.DATA['halo-health'] -- title, tagline, services[], live, narrative[4]"
+      },
+      "images": {
+        "cover": {
+          "slot": "work-2",
+          "currentSrc": null,
+          "status": "empty (shows placeholder)"
+        },
+        "gallery": [
+          {
+            "slot": "cs-halo-health-2",
+            "label": "foundations (chapter 1, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-halo-health-3",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-halo-health-4",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-halo-health-5",
+            "label": "what shipped (chapter 2, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-halo-health-6",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-halo-health-7",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-halo-health-8",
+            "label": "where it landed (chapter 3, wide)",
+            "status": "empty (shows placeholder)"
+          }
+        ]
+      },
+      "video": {
+        "file": "uploads/work-2.webm",
+        "status": "referenced but file missing (404) -- optional hover loop, page tolerates its absence"
+      }
+    },
+    "frame": {
+      "num": "03",
+      "year": "2025",
+      "title": "Frame",
+      "kind": "Video editing tool",
+      "homepage": {
+        "file": "Moe Ali Portfolio.dc.html",
+        "cardPosition": "3 of 6",
+        "linksTo": "Project.dc.html?p=frame"
+      },
+      "caseStudy": {
+        "file": "Project.dc.html",
+        "url": "Project.dc.html?p=frame",
+        "dataEntry": "Component.DATA['frame'] -- title, tagline, services[], live, narrative[4]"
+      },
+      "images": {
+        "cover": {
+          "slot": "work-3",
+          "currentSrc": null,
+          "status": "empty (shows placeholder)"
+        },
+        "coverSquareMobile": {
+          "slot": "work-3-sq",
+          "currentSrc": null,
+          "status": "empty (shows placeholder)",
+          "usedBelow": "860px viewport width -- swaps in for the wide cover"
+        },
+        "gallery": [
+          {
+            "slot": "cs-frame-2",
+            "label": "foundations (chapter 1, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-frame-3",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-frame-4",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-frame-5",
+            "label": "what shipped (chapter 2, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-frame-6",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-frame-7",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-frame-8",
+            "label": "where it landed (chapter 3, wide)",
+            "status": "empty (shows placeholder)"
+          }
+        ]
+      },
+      "video": {
+        "file": "uploads/work-3.webm",
+        "status": "referenced but file missing (404) -- optional hover loop, page tolerates its absence"
+      }
+    },
+    "mahsouly": {
+      "num": "04",
+      "year": "2024",
+      "title": "Mahsouly",
+      "kind": "Agri-tech crop trading",
+      "homepage": {
+        "file": "Moe Ali Portfolio.dc.html",
+        "cardPosition": "4 of 6",
+        "linksTo": "Project.dc.html?p=mahsouly"
+      },
+      "caseStudy": {
+        "file": "Project.dc.html",
+        "url": "Project.dc.html?p=mahsouly",
+        "dataEntry": "Component.DATA['mahsouly'] -- title, tagline, services[], live, narrative[4]"
+      },
+      "images": {
+        "cover": {
+          "slot": "work-4",
+          "currentSrc": "uploads/06 Mahsouly Mobile.webp",
+          "status": "filled"
+        },
+        "gallery": [
+          {
+            "slot": "cs-mahsouly-2",
+            "label": "foundations (chapter 1, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-mahsouly-3",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-mahsouly-4",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-mahsouly-5",
+            "label": "what shipped (chapter 2, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-mahsouly-6",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-mahsouly-7",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-mahsouly-8",
+            "label": "where it landed (chapter 3, wide)",
+            "status": "empty (shows placeholder)"
+          }
+        ]
+      },
+      "video": {
+        "file": "uploads/work-4.webm",
+        "status": "referenced but file missing (404) -- optional hover loop, page tolerates its absence"
+      }
+    },
+    "arcadia": {
+      "num": "05",
+      "year": "2024",
+      "title": "Arcadia",
+      "kind": "Membership platform",
+      "homepage": {
+        "file": "Moe Ali Portfolio.dc.html",
+        "cardPosition": "5 of 6",
+        "linksTo": "Project.dc.html?p=arcadia"
+      },
+      "caseStudy": {
+        "file": "Project.dc.html",
+        "url": "Project.dc.html?p=arcadia",
+        "dataEntry": "Component.DATA['arcadia'] -- title, tagline, services[], live, narrative[4]"
+      },
+      "images": {
+        "cover": {
+          "slot": "work-5",
+          "currentSrc": null,
+          "status": "empty (shows placeholder)"
+        },
+        "gallery": [
+          {
+            "slot": "cs-arcadia-2",
+            "label": "foundations (chapter 1, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-arcadia-3",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-arcadia-4",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-arcadia-5",
+            "label": "what shipped (chapter 2, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-arcadia-6",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-arcadia-7",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-arcadia-8",
+            "label": "where it landed (chapter 3, wide)",
+            "status": "empty (shows placeholder)"
+          }
+        ]
+      },
+      "video": {
+        "status": "no video hookup exists for this card"
+      }
+    },
+    "lime": {
+      "num": "06",
+      "year": "2024",
+      "title": "Lime",
+      "kind": "B2B wholesale commerce",
+      "homepage": {
+        "file": "Moe Ali Portfolio.dc.html",
+        "cardPosition": "6 of 6",
+        "linksTo": "Project.dc.html?p=lime"
+      },
+      "caseStudy": {
+        "file": "Project.dc.html",
+        "url": "Project.dc.html?p=lime",
+        "dataEntry": "Component.DATA['lime'] -- title, tagline, services[], live, narrative[4]"
+      },
+      "images": {
+        "cover": {
+          "slot": "work-6",
+          "currentSrc": "uploads/06 Lime Desktop-5e28fea7.webp",
+          "status": "filled"
+        },
+        "coverSquareMobile": {
+          "slot": "work-6-sq",
+          "currentSrc": "uploads/04 Lime.png",
+          "status": "filled",
+          "usedBelow": "860px viewport width -- swaps in for the wide cover",
+          "note": "still the corrupted/truncated import -- replace before treating as done"
+        },
+        "gallery": [
+          {
+            "slot": "cs-lime-2",
+            "label": "foundations (chapter 1, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-lime-3",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-lime-4",
+            "label": "foundations (chapter 1, detail)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-lime-5",
+            "label": "what shipped (chapter 2, wide)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-lime-6",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-lime-7",
+            "label": "what shipped (chapter 2, screen)",
+            "status": "empty (shows placeholder)"
+          },
+          {
+            "slot": "cs-lime-8",
+            "label": "where it landed (chapter 3, wide)",
+            "status": "empty (shows placeholder)"
+          }
+        ]
+      },
+      "video": {
+        "file": "uploads/work-6.webm",
+        "status": "referenced but file missing (404) -- optional hover loop, page tolerates its absence"
+      }
+    }
+  }
+}
